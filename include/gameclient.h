@@ -26,7 +26,7 @@ namespace dtn
 	{
 	public :
 		// constructor
-		GameClient(int playerID);
+		GameClient(int playerID, std::string ip);
 
 		// run (main loop)
 		void run();
@@ -51,7 +51,7 @@ namespace dtn
 		sf::TcpSocket m_socket;									// socket for TCP comm
 		sf::Mutex m_mutex;										// global mutex (for dual thread communication)
 		sf::Thread m_thread;									// one thread used to receive data asynchronously
-		
+		std::string m_ip;										// the ip address of the server
 		// listeners
 		void onEntityDrawn(std::shared_ptr<dtn::Event> e);
 		void onEntityMoved(std::shared_ptr<dtn::Event> e);

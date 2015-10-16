@@ -4,7 +4,7 @@
 /*
 	Sets up a game client class to represent one player's view.
 */
-dtn::GameClient::GameClient(int playerID)
+dtn::GameClient::GameClient(int playerID, std::string ip)
 	: m_inputhandler(playerID), m_window(
 	sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32), "Game Client"),
 	m_thread(&GameClient::receiveStrings, this), m_screen(playerID)
@@ -33,6 +33,7 @@ dtn::GameClient::GameClient(int playerID)
 		std::bind(&GameClient::sendString, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RUNESTONE_PLAY,
 		std::bind(&GameClient::sendString, this, std::placeholders::_1));
+	m_ip = ip;
 }
 
 // run
@@ -41,7 +42,7 @@ dtn::GameClient::GameClient(int playerID)
 */
 void dtn::GameClient::run()
 {
-	m_socket.connect("localhost", 5555);
+	m_socket.connect(m_ip, 5555);
 	m_thread.launch();
 	while (true)
 	{
