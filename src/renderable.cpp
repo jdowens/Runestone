@@ -58,3 +58,13 @@ int dtn::Renderable::getOwner()
 {
 	return m_owner;
 }
+
+bool dtn::Renderable::getHasMoved()
+{
+	return m_hasMoved;
+}
+
+void dtn::Renderable::setHasMoved(bool val)
+{
+	m_hasMoved = val;
+}

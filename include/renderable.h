@@ -29,10 +29,13 @@ namespace dtn
 		int getLos();
 		std::string getToolTip();
 		int getOwner();
+		bool getHasMoved();
+		void setHasMoved(bool val);
 	private :
 		int m_entityID;
 		int m_los;
 		int m_owner;
+		bool m_hasMoved;
 		std::string m_tooltipData;
 		std::shared_ptr<sf::Texture> m_texture;
 		sf::Sprite m_sprite;
