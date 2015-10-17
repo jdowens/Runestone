@@ -136,6 +136,13 @@ int dtn::Utilities::TileDistance(sf::IntRect rect1, sf::Vector2i vec2)
 	return TileDistance(rect1, sf::IntRect(vec2.x, vec2.y, 1, 1));
 }
 
+float dtn::Utilities::VectorDistance(sf::Vector2f vec1, sf::Vector2f vec2)
+{
+	float distance = std::sqrt(std::pow((vec2.x - vec1.x), 2.0f) +
+		std::pow((vec2.y - vec1.y), 2.0));
+	return distance;
+}
+
 // FloatVecToInt
 sf::Vector2i dtn::Utilities::FloatVecToInt(sf::Vector2f vec)
 {

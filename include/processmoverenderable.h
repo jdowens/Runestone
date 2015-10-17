@@ -32,6 +32,12 @@ namespace dtn
 		virtual void onDeath();
 	private:
 		float m_speed;
+		float m_minimumSpeed;
+		float m_curSpeed;
+		float m_acceleration;
+		float remainingTime();
+		float remainingDistance();
+		float m_distanceEstimate;
 		std::shared_ptr<dtn::Renderable> m_renderable;
 		sf::Vector2f m_destination;
 		sf::Vector2f m_direction;

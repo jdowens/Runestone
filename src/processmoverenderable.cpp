@@ -9,8 +9,11 @@ dtn::ProcessMoveRenderable::ProcessMoveRenderable(
 	m_destination = destination;
 	m_direction = sf::Vector2f(0.f, 0.f);
 	m_speed = speed;
+	m_minimumSpeed = m_speed*0.05;
+	m_curSpeed = 0.0f;
 	m_repeated = false;
 	m_dead = false;
+	m_distanceEstimate = 0.0f;
 }
 
 // update
@@ -19,6 +22,20 @@ dtn::ProcessMoveRenderable::ProcessMoveRenderable(
 */
 bool dtn::ProcessMoveRenderable::update(float dt)
 {
+	float remDist = remainingDistance();
+	if (remDist < 0.45*m_distanceEstimate)
+	{
+		m_curSpeed -= m_acceleration*dt;
+		if (m_curSpeed < m_minimumSpeed)
+			m_curSpeed = m_minimumSpeed;
+	}
+	else if (remDist > 0.55*m_distanceEstimate)
+	{
+		if (m_curSpeed < m_speed)
+			m_curSpeed += m_acceleration*dt;
+		if (m_curSpeed > m_speed)
+			m_curSpeed = m_speed;
+	}
 	sf::Vector2f newPosition = m_renderable->getSprite().getPosition();
 	// if renderable outside of window (strange floating point bug)
 	// snap to position
@@ -57,8 +74,8 @@ bool dtn::ProcessMoveRenderable::update(float dt)
 	// else move closer to position
 	else
 	{
-		newPosition.x += m_speed * m_direction.x*dt;
-		newPosition.y += m_speed * m_direction.y*dt;
+		newPosition.x += m_curSpeed * m_direction.x*dt;
+		newPosition.y += m_curSpeed * m_direction.y*dt;
 	}
 	m_renderable->getSprite().setPosition(newPosition);
 	return m_dead;
@@ -81,6 +98,10 @@ void dtn::ProcessMoveRenderable::onAttach()
 	std::cout << m_renderable->getEntityID()
 		<< ' ' << m_renderable->getSprite().getPosition().x << ' ' << m_renderable->getSprite().getPosition().y 
 		<< ' ' << m_destination.x << ' ' << m_destination.y << "\n\n";
+	// accelerate to max speed at 50 % of distance traveled
+	m_distanceEstimate = remainingDistance();
+	float time = 2*(m_distanceEstimate / m_speed);
+	m_acceleration = (m_speed / (time / 2));
 }
 
 // onDeath
@@ -88,4 +109,20 @@ void dtn::ProcessMoveRenderable::onDeath()
 {
 	std::cout << "MOVE COMPLETED:\n";
 	std::cout << "\nENTITY_ID: " << m_renderable->getEntityID() << "\n\n";
+}
+
+float dtn::ProcessMoveRenderable::remainingTime()
+{
+	float dist = remainingDistance();
+	return dist / m_speed;
+}
+
+float dtn::ProcessMoveRenderable::remainingDistance()
+{
+	float dist;
+	if (m_renderable.get() != NULL)
+		dist = dtn::Utilities::VectorDistance(m_renderable->getSprite().getPosition(), m_destination);
+	else
+		dist = 0;
+	return dist;
 }

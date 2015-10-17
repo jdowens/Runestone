@@ -37,6 +37,7 @@ namespace dtn
 		static int TileDistance(sf::Vector2i vec1, sf::Vector2i vec2);
 		static int TileDistance(sf::IntRect rect1, sf::IntRect rect2);
 		static int TileDistance(sf::IntRect rect1, sf::Vector2i vec2);
+		static float VectorDistance(sf::Vector2f vec1, sf::Vector2f vec2);
 		static sf::Vector2i FloatVecToInt(sf::Vector2f vec);
 		static sf::Vector2f IntVecToFloat(sf::Vector2i vec);
 		static void OnResized(int w, int h);
