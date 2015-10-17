@@ -1,67 +1,28 @@
 #include "gamescreen.h"
 
 dtn::GameScreen::GameScreen(std::shared_ptr<sf::Texture> background, int playerID)
+	: m_movementDecal(playerID)
 {
 	m_backgroundTexture = background;
 	m_background.setTexture(*m_backgroundTexture);
 	m_tooltip.setInvisible();
 
-	// attach listeners
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_DRAWN,
-		std::bind(&GameScreen::onEntityDrawn, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVED,
-		std::bind(&GameScreen::onEntityMoved, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_BATTLE,
-		std::bind(&GameScreen::onEntityBattle, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_ADDED,
-		std::bind(&GameScreen::onEntityAdded, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
-		std::bind(&GameScreen::onEntityMoveFlagChanged, this, std::placeholders::_1));
+	m_movementDecal.setInvisible();
 
-	/*dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ADD_RENDERABLE,
-		std::bind(&GameScreen::onAddRenderable, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::MOVE_RENDERABLE,
-		std::bind(&GameScreen::onMoveRenderable, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::DELETE_RENDERABLE,
-		std::bind(&GameScreen::onDeleteRenderable, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::UPDATE_RENDERABLE_LOS,
-		std::bind(&GameScreen::onUpdateRenderableLos, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::UPDATE_RENDERABLE_TOOLTIP,
-		std::bind(&GameScreen::onUpdateRenderableTooltip, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::UPDATE_RENDERABLE_OWNER,
-		std::bind(&GameScreen::onUpdateRenderableOwner, this, std::placeholders::_1));*/
+	initializeListeners();
 
 	m_playerID = playerID;
 }
 
 dtn::GameScreen::GameScreen(int playerID)
+	: m_movementDecal(playerID)
 {
 	m_tooltip.setInvisible();
 
-	// attach listeners
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_DRAWN,
-		std::bind(&GameScreen::onEntityDrawn, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVED,
-		std::bind(&GameScreen::onEntityMoved, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_BATTLE,
-		std::bind(&GameScreen::onEntityBattle, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_ADDED,
-		std::bind(&GameScreen::onEntityAdded, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
-		std::bind(&GameScreen::onEntityMoveFlagChanged, this, std::placeholders::_1));
+	m_movementDecal.setInvisible();
 
-	/*dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ADD_RENDERABLE,
-		std::bind(&GameScreen::onAddRenderable, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::MOVE_RENDERABLE,
-		std::bind(&GameScreen::onMoveRenderable, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::DELETE_RENDERABLE,
-		std::bind(&GameScreen::onDeleteRenderable, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::UPDATE_RENDERABLE_LOS,
-		std::bind(&GameScreen::onUpdateRenderableLos, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::UPDATE_RENDERABLE_TOOLTIP,
-		std::bind(&GameScreen::onUpdateRenderableTooltip, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::UPDATE_RENDERABLE_OWNER,
-		std::bind(&GameScreen::onUpdateRenderableOwner, this, std::placeholders::_1));*/
+	initializeListeners();
+
 	m_playerID = playerID;
 }
 
@@ -107,6 +68,8 @@ void dtn::GameScreen::render(sf::RenderWindow& window, int playerID)
 		}
 		window.draw(it->second->getSprite());
 	}
+		
+	m_movementDecal.render(window);
 	m_tooltip.render(window);
 }
 
@@ -237,6 +200,21 @@ void dtn::GameScreen::onUpdateRenderableOwner(std::shared_ptr<dtn::Event> e)
 	{
 		it->second->setOwner(cast->owner);
 	}
+}
+
+void dtn::GameScreen::initializeListeners()
+{
+	// attach listeners
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_DRAWN,
+		std::bind(&GameScreen::onEntityDrawn, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVED,
+		std::bind(&GameScreen::onEntityMoved, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_BATTLE,
+		std::bind(&GameScreen::onEntityBattle, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_ADDED,
+		std::bind(&GameScreen::onEntityAdded, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
+		std::bind(&GameScreen::onEntityMoveFlagChanged, this, std::placeholders::_1));
 }
 
 void dtn::GameScreen::onEntityDrawn(std::shared_ptr<dtn::Event> e)

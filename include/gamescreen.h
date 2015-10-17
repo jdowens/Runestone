@@ -25,6 +25,7 @@
 #include "processmoverenderable.h"
 #include "processshakerenderable.h"
 #include "tooltip.h"
+#include "movementdecal.h"
 
 namespace dtn
 {
@@ -58,10 +59,13 @@ namespace dtn
 		std::shared_ptr<sf::Texture> m_backgroundTexture;
 		dtn::ProcessManager m_processManager;
 		dtn::Tooltip m_tooltip;
+		dtn::MovementDecal m_movementDecal;
 		sf::Sprite m_background;
 		int m_playerID;
 
 		// event listeners
+		void initializeListeners();
+
 		void onEntityDrawn(std::shared_ptr<dtn::Event> e);
 		void onEntityMoved(std::shared_ptr<dtn::Event> e);
 		void onEntityBattle(std::shared_ptr<dtn::Event> e);
