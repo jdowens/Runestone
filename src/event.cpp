@@ -39,6 +39,8 @@ std::string dtn::Event::eventTypeToString(dtn::Event::EventType type)
 	case dtn::Event::EventType::ENTITY_DRAWN: ret = "ENTITY_DRAWN"; break;
 	case dtn::Event::EventType::MANA_CHANGED: ret = "MANA_CHANGED"; break;
 	case dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED: ret = "ENTITY_MOVE_FLAG_CHANGED"; break;
+	case dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL: ret = "REQUEST_ENTITY_MOVE_DECAL"; break;
+	case dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL: ret = "RECEIVED_ENTITY_MOVE_DECAL"; break;
 	case dtn::Event::EventType::UNKNOWN: ret = "UNKNOWN"; break;
 	}
 	return ret;
@@ -243,6 +245,26 @@ std::shared_ptr<dtn::Event> dtn::Event::stringToEvent(std::string str)
 		ret = std::shared_ptr<dtn::Event>(new EventEntityMoveFlagChanged(entID, f));
 	}
 		break;
+	case dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL:
+	{
+		int pID;
+		sf::Vector2i src;
+		ss >> word >> pID >> word >> src.x >> src.y;
+		ret = std::shared_ptr<dtn::Event>(new EventRequestEntityMoveDecal(pID, src));
+	}
+		break;
+	case dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL:
+	{
+		std::vector<sf::Vector2i> locs;
+		ss >> word;
+		while (ss)
+		{
+			sf::Vector2i tmp;
+			ss >> tmp.x >> tmp.y;
+			locs.push_back(tmp);
+		}
+	}
+		break;
 	}
 	return ret;
 }
@@ -293,6 +315,10 @@ dtn::Event::EventType dtn::Event::stringToEventType(std::string str)
 		ret = dtn::Event::EventType::MANA_CHANGED;
 	else if (str == "ENTITY_MOVE_FLAG_CHANGED")
 		ret = dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED;
+	else if (str == "REQUEST_ENTITY_MOVE_DECAL")
+		ret = dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL;
+	else if (str == "RECEIVED_ENTITY_MOVE_DECAL")
+		ret = dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL;
 	else
 		ret = dtn::Event::EventType::UNKNOWN;
 	return ret;
@@ -668,3 +694,40 @@ std::string dtn::EventEntityMoveFlagChanged::toString()
 	return ss.str();
 }
 
+dtn::EventRequestEntityMoveDecal::EventRequestEntityMoveDecal(int pID, sf::Vector2i src)
+	: dtn::Event(dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL)
+{
+	playerID = pID;
+	source = src;
+}
+
+std::string dtn::EventRequestEntityMoveDecal::toString()
+{
+	std::stringstream ss;
+	ss << "EVENT_TYPE: " << eventTypeToString(m_type) << '\n';
+	ss << "PLAYER_ID: " << playerID;
+	ss << "SOURCE: " << source.x << ' ' << source.y;
+	return ss.str();
+}
+
+dtn::EventReceivedEntityMoveDecal::EventReceivedEntityMoveDecal(std::vector<sf::Vector2i>& locs)
+	: dtn::Event(dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL)
+{
+	for (auto it = locs.begin(); it != locs.end(); ++it)
+	{
+		movementLocations.push_back(*it);
+	}
+}
+
+std::string dtn::EventReceivedEntityMoveDecal::toString()
+{
+	std::stringstream ss;
+	ss << "EVENT_TYPE: " << eventTypeToString(m_type) << '\n';
+	ss << "LIST_BEGIN:";
+	for (auto it = movementLocations.begin(); it != movementLocations.end(); ++it)
+	{
+		ss << '\n' <<  it->x << ' ' << it->y;
+	}
+	ss << '\n';
+	return ss.str();
+}

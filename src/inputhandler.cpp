@@ -47,6 +47,7 @@ void dtn::InputHandler::updateHovered(dtn::GameScreen& screen)
 	else
 	{
 		screen.m_tooltip.setInvisible();
+		screen.m_movementDecal.setInvisible();
 	}
 }
 

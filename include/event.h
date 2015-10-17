@@ -48,6 +48,8 @@ namespace dtn
 			ENTITY_DRAWN = 0x13,
 			MANA_CHANGED = 0x14,
 			ENTITY_MOVE_FLAG_CHANGED = 0x15,
+			REQUEST_ENTITY_MOVE_DECAL = 0x16,
+			RECEIVED_ENTITY_MOVE_DECAL = 0x17,
 			ALL_EVENTS = 0xFE
 			// REMEBER UPDATE STEPS 1 2 3 4 (step 4 in eventmanager.cpp)
 		};
@@ -293,6 +295,30 @@ namespace dtn
 		int entityID;
 		bool flag;
 	};
+
+	// EventRequestEntityMoveDecal
+	/*
+	// ask the server for the movement decal for the hovered runestone
+	*/
+	struct EventRequestEntityMoveDecal : public Event
+	{
+		EventRequestEntityMoveDecal(int pID, sf::Vector2i src);
+		virtual std::string toString();
+		int playerID;
+		sf::Vector2i source;
+	};
+
+	// EventReceivedEntityMoveDecal
+	/*
+	// Contains the requested movement decal from the server
+	*/
+	struct EventReceivedEntityMoveDecal : public Event
+	{
+		EventReceivedEntityMoveDecal(std::vector<sf::Vector2i>& locs);
+		virtual std::string toString();
+		std::vector<sf::Vector2i> movementLocations;
+	};
+
 }
 
 #endif

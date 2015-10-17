@@ -25,6 +25,8 @@ dtn::EventManager::EventManager()
 	m_idCounts[dtn::Event::EventType::UPDATE_RENDERABLE_TOOLTIP] = 0;
 	m_idCounts[dtn::Event::EventType::MANA_CHANGED] = 0;
 	m_idCounts[dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED] = 0;
+	m_idCounts[dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL] = 0;
+	m_idCounts[dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL] = 0;
 	m_idCounts[dtn::Event::EventType::ALL_EVENTS] = 0;
 }
 
