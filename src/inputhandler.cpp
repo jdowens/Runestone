@@ -28,11 +28,11 @@ dtn::InputHandler::InputHandler(int playerID)
 	}
 }
 
-void dtn::InputHandler::update(sf::RenderWindow& window, dtn::GameScreen& screen)
+void dtn::InputHandler::update(sf::RenderWindow& window, dtn::GameScreen& screen, dtn::HUD& HUD)
 {
 	m_mousePos = sf::Mouse::getPosition(window);
 	updateHovered(screen);
-	handleEvents(window);
+	handleEvents(window, HUD);
 }
 
 void dtn::InputHandler::updateHovered(dtn::GameScreen& screen)
@@ -50,11 +50,13 @@ void dtn::InputHandler::updateHovered(dtn::GameScreen& screen)
 	}
 }
 
-void dtn::InputHandler::handleEvents(sf::RenderWindow& window)
+void dtn::InputHandler::handleEvents(sf::RenderWindow& window, dtn::HUD& hud)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
+		// handle events for HUD first
+		hud.handleEvent(event);
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();

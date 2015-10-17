@@ -19,6 +19,7 @@
 #include "event.h"
 #include "gamescreen.h"
 #include "inputhandler.h"
+#include "HUD.h"
 
 namespace dtn
 {
@@ -45,6 +46,7 @@ namespace dtn
 		
 		// data
 		GameScreen m_screen;									// graphics portion
+		HUD m_HUD;												// heads up display
 		InputHandler m_inputhandler;							// all input handled here
 		sf::RenderWindow m_window;								// game window
 		sf::Clock m_clock;										// client clock	

@@ -7,7 +7,7 @@
 dtn::GameClient::GameClient(int playerID, std::string ip)
 	: m_inputhandler(playerID), m_window(
 		sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32), "Game Client", sf::Style::Default & ~sf::Style::Resize),
-	m_thread(&GameClient::receiveStrings, this), m_screen(playerID)
+	m_thread(&GameClient::receiveStrings, this), m_screen(playerID), m_HUD(playerID)
 {
 	m_screen.loadBackground("Resources/grid.png");
 	m_screen.moveBackground(sf::Vector2f(dtn::Utilities::BOARD_LEFT*
@@ -76,7 +76,9 @@ void dtn::GameClient::update()
 	// update game screen
 	m_screen.update(dt);
 	// handle events
-	m_inputhandler.update(m_window, m_screen);
+	m_inputhandler.update(m_window, m_screen, m_HUD);
+	// update HUD
+	m_HUD.update(dt);
 	// draw
 	render();
 }
@@ -88,6 +90,7 @@ void dtn::GameClient::update()
 void dtn::GameClient::render()
 {
 	m_window.clear();
+	m_HUD.render(m_window);
 	m_screen.render(m_window, m_playerID);
 	m_window.display();
 }

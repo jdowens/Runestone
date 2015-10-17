@@ -1,11 +1,8 @@
 #include "gameclient.h"
 #include<iostream>
-#include<SFGUI/SFGUI.hpp>
 
 int main()
 {
-	// initialize sfgui
-	
 	int pnum;
 	std::cout << "ENTER PLAYER NUMBER: ";
 	std::cin >> pnum;

@@ -8,6 +8,7 @@
 #include "gamescreen.h"
 #include "renderable.h"
 #include "globaleventqueue.h"
+#include "HUD.h"
 
 namespace dtn
 {
@@ -15,10 +16,10 @@ namespace dtn
 	{
 	public :
 		InputHandler(int playerID);
-		void update(sf::RenderWindow& window, dtn::GameScreen& screen);
+		void update(sf::RenderWindow& window, dtn::GameScreen& screen, dtn::HUD& HUD);
 	private :
 		void updateHovered(dtn::GameScreen& screen);
-		void handleEvents(sf::RenderWindow& window);
+		void handleEvents(sf::RenderWindow& window, dtn::HUD& HUD);
 		sf::Vector2i m_mousePos;
 		std::shared_ptr<dtn::Renderable> m_hovered;
 		std::shared_ptr<dtn::Renderable> m_selected;
