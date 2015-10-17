@@ -89,7 +89,7 @@ bool dtn::ProcessMoveRenderable::update(float dt)
 		m_dead = true;
 	}
 	// if moving up and lower than y pos snap to pos
-	else if (m_direction.y < 0 && newPosition.x < m_destination.x)
+	else if (m_direction.y < 0 && newPosition.y < m_destination.y)
 	{
 		std::cout << "MOVED PAST IN NEGATIVE Y DIRECTION IN MOVE RENDERABLE: " << '\n';
 		newPosition.x = static_cast<float>(m_destination.x);
