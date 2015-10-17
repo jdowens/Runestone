@@ -42,7 +42,8 @@ namespace dtn
 
 		// TCP communication function (send)
 		void sendString(std::shared_ptr<dtn::Event> e);
-
+		
+		// data
 		GameScreen m_screen;									// graphics portion
 		InputHandler m_inputhandler;							// all input handled here
 		sf::RenderWindow m_window;								// game window
@@ -52,11 +53,14 @@ namespace dtn
 		sf::Mutex m_mutex;										// global mutex (for dual thread communication)
 		sf::Thread m_thread;									// one thread used to receive data asynchronously
 		std::string m_ip;										// the ip address of the server
+		bool m_running;											// flag for whether or not a player has quit the game
+																
 		// listeners
 		void onEntityDrawn(std::shared_ptr<dtn::Event> e);
 		void onEntityMoved(std::shared_ptr<dtn::Event> e);
 		void onEntityBattle(std::shared_ptr<dtn::Event> e);
 		void onEntityAdded(std::shared_ptr<dtn::Event> e);
+		void onGameQuit(std::shared_ptr<dtn::Event> e);
 	};
 }
 

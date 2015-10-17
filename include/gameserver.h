@@ -34,6 +34,7 @@ namespace dtn
 		// called once per loop iteration
 		void update();
 	private :
+		bool m_running;										// true if both players are connected, false if one quits
 		std::vector<dtn::Player> m_players;					// two players
 		int m_currentPlayer;								// number of players
 		int m_turnCount;									// which turn the server is on
@@ -58,6 +59,7 @@ namespace dtn
 		void onRunestoneMove(std::shared_ptr<dtn::Event> e);
 		void onRunestonePlay(std::shared_ptr<dtn::Event> e);
 		void onRunestoneAttack(std::shared_ptr<dtn::Event> e);
+		void onPlayerQuit(std::shared_ptr<dtn::Event> e);
 	};
 }
 

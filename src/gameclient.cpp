@@ -33,7 +33,12 @@ dtn::GameClient::GameClient(int playerID, std::string ip)
 		std::bind(&GameClient::sendString, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RUNESTONE_PLAY,
 		std::bind(&GameClient::sendString, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::GAME_QUIT,
+		std::bind(&GameClient::sendString, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::GAME_QUIT,
+		std::bind(&GameClient::onGameQuit, this, std::placeholders::_1));
 	m_ip = ip;
+	m_running = true;
 }
 
 // run
@@ -44,10 +49,12 @@ void dtn::GameClient::run()
 {
 	m_socket.connect(m_ip, 5555);
 	m_thread.launch();
-	while (true)
+	while (m_running)
 	{
 		update();
 	}
+	m_window.close();
+	m_thread.terminate();
 }
 
 // update
@@ -204,4 +211,13 @@ void dtn::GameClient::onEntityAdded(std::shared_ptr<dtn::Event> e)
 	dtn::GlobalEventQueue::getInstance()->pushEvent(updateLos);
 	dtn::GlobalEventQueue::getInstance()->pushEvent(updateO);
 	dtn::GlobalEventQueue::getInstance()->pushEvent(updateTT);
+}
+
+// onGameQuit
+/*
+Callback function for when a player has requested to quit the game
+*/
+void dtn::GameClient::onGameQuit(std::shared_ptr<dtn::Event> e) 
+{
+	m_running = false;
 }

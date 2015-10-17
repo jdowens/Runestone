@@ -35,6 +35,9 @@ dtn::GameServer::GameServer()
 		std::bind(&GameServer::onRunestoneMove, this, std::placeholders::_1));
 	m_receiveEventManager.attachListener(dtn::Event::EventType::RUNESTONE_PLAY,
 		std::bind(&GameServer::onRunestonePlay, this, std::placeholders::_1));
+	m_receiveEventManager.attachListener(dtn::Event::EventType::GAME_QUIT,
+		std::bind(&GameServer::onPlayerQuit, this, std::placeholders::_1));
+	m_running = true;
 }
 
 // run
@@ -51,7 +54,7 @@ void dtn::GameServer::run()
 	m_thread1.launch();
 	m_thread2.launch();
 	// run main loop
-	while (true)
+	while (m_running)
 	{
 		m_mutex1.lock();
 		m_mutex2.lock();
@@ -59,6 +62,8 @@ void dtn::GameServer::run()
 		m_mutex2.unlock();
 		m_mutex1.unlock();
 	}
+	m_thread1.terminate();
+	m_thread2.terminate();
 }
 
 // update
@@ -141,6 +146,11 @@ void dtn::GameServer::onRunestoneAttack(std::shared_ptr<dtn::Event> e)
 			new dtn::EventEntityBattle(rune1->getEntityID(), rune2->getEntityID(), rune1->toString(),
 			rune2->toString(), rune1->isDead(), rune2->isDead())));
 	}
+}
+
+void dtn::GameServer::onPlayerQuit(std::shared_ptr<dtn::Event> e)
+{
+	m_running = false;
 }
 
 // draw
