@@ -90,8 +90,8 @@ void dtn::GameClient::update()
 void dtn::GameClient::render()
 {
 	m_window.clear();
-	m_HUD.render(m_window);
 	m_screen.render(m_window, m_playerID);
+	m_HUD.render(m_window);
 	m_window.display();
 }
 

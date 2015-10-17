@@ -8,6 +8,8 @@
 #include<SFGUI/SFGUI.hpp>
 #include<SFGUI/Widgets.hpp>
 
+#include "utilities.h"
+
 namespace dtn
 {
 	class HUD
@@ -23,6 +25,7 @@ namespace dtn
 		int m_opponentMana;
 		int m_playerID;
 		std::shared_ptr<sfg::Window> m_window;
+		std::shared_ptr<sfg::Box> m_guiLayout;
 		std::shared_ptr<sfg::Label> m_playerManaText;
 		std::shared_ptr<sfg::Label> m_opponentManaText;
 		void setPlayerManaText(int amount);
