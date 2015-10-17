@@ -23,6 +23,8 @@ dtn::EventManager::EventManager()
 	m_idCounts[dtn::Event::EventType::UPDATE_RENDERABLE_LOS] = 0;
 	m_idCounts[dtn::Event::EventType::UPDATE_RENDERABLE_OWNER] = 0;
 	m_idCounts[dtn::Event::EventType::UPDATE_RENDERABLE_TOOLTIP] = 0;
+	m_idCounts[dtn::Event::EventType::MANA_CHANGED] = 0;
+	m_idCounts[dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED] = 0;
 	m_idCounts[dtn::Event::EventType::ALL_EVENTS] = 0;
 }
 

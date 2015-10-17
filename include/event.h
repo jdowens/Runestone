@@ -47,6 +47,7 @@ namespace dtn
 			ENTITY_BATTLE = 0x12,
 			ENTITY_DRAWN = 0x13,
 			MANA_CHANGED = 0x14,
+			ENTITY_MOVE_FLAG_CHANGED = 0x15,
 			ALL_EVENTS = 0xFE
 			// REMEBER UPDATE STEPS 1 2 3 4 (step 4 in eventmanager.cpp)
 		};
@@ -279,6 +280,18 @@ namespace dtn
 		virtual std::string toString();
 		int playerID;
 		int newManaValue;
+	};
+
+	// EventEntityMoveFlagChanged
+	/*
+	// signals that an entity's move flag has changed
+	*/
+	struct EventEntityMoveFlagChanged : public Event
+	{
+		EventEntityMoveFlagChanged(int entID, bool f);
+		virtual std::string toString();
+		int entityID;
+		bool flag;
 	};
 }
 

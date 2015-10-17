@@ -38,6 +38,7 @@ std::string dtn::Event::eventTypeToString(dtn::Event::EventType type)
 	case dtn::Event::EventType::ENTITY_BATTLE: ret = "ENTITY_BATTLE"; break;
 	case dtn::Event::EventType::ENTITY_DRAWN: ret = "ENTITY_DRAWN"; break;
 	case dtn::Event::EventType::MANA_CHANGED: ret = "MANA_CHANGED"; break;
+	case dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED: ret = "ENTITY_MOVE_FLAG_CHANGED"; break;
 	case dtn::Event::EventType::UNKNOWN: ret = "UNKNOWN"; break;
 	}
 	return ret;
@@ -230,9 +231,16 @@ std::shared_ptr<dtn::Event> dtn::Event::stringToEvent(std::string str)
 	case dtn::Event::EventType::MANA_CHANGED:
 	{
 		int pID, newMana;
-		std::string str;
 		ss >> word >> pID >> word >> newMana;
 		ret = std::shared_ptr<dtn::Event>(new EventManaChanged(pID, newMana));
+	}
+		break;
+	case dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED:
+	{
+		int entID;
+		bool f;
+		ss >> word >> entID >> word >> f;
+		ret = std::shared_ptr<dtn::Event>(new EventEntityMoveFlagChanged(entID, f));
 	}
 		break;
 	}
@@ -283,6 +291,8 @@ dtn::Event::EventType dtn::Event::stringToEventType(std::string str)
 		ret = dtn::Event::EventType::ENTITY_DRAWN;
 	else if (str == "MANA_CHANGED")
 		ret = dtn::Event::EventType::MANA_CHANGED;
+	else if (str == "EVENT_ENTITY_MOVE_FLAG_CHANGED")
+		ret = dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED;
 	else
 		ret = dtn::Event::EventType::UNKNOWN;
 	return ret;
@@ -641,3 +651,20 @@ std::string dtn::EventManaChanged::toString()
 	ss << "NEW_MANA_VALUE: " << newManaValue << '\n';
 	return ss.str();
 }
+
+dtn::EventEntityMoveFlagChanged::EventEntityMoveFlagChanged(int entID, bool f)
+	: dtn::Event(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED)
+{
+	entityID = entID;
+	flag = f;
+}
+
+std::string dtn::EventEntityMoveFlagChanged::toString()
+{
+	std::stringstream ss;
+	ss << "EVENT_TYPE: " << eventTypeToString(m_type) << '\n';
+	ss << "ENTITY_ID: " << entityID << '\n';
+	ss << "FLAG: " << flag << '\n';
+	return ss.str();
+}
+
