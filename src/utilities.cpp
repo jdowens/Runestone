@@ -1,7 +1,7 @@
 #include "utilities.h"
 
 int dtn::Utilities::WINDOW_WIDTH = 1280;
-int dtn::Utilities::WINDOW_HEIGHT = 800;
+int dtn::Utilities::WINDOW_HEIGHT = 720;
 int dtn::Utilities::PIXELS_PER_TILE_X = WINDOW_WIDTH / (2 * BOARD_LEFT + BOARD_WIDTH);
 int dtn::Utilities::PIXELS_PER_TILE_Y = WINDOW_HEIGHT / (2 * BOARD_TOP + BOARD_HEIGHT);
 
