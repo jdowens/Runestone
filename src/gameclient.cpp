@@ -6,7 +6,7 @@
 */
 dtn::GameClient::GameClient(int playerID, std::string ip)
 	: m_inputhandler(playerID), m_window(
-	sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32), "Game Client"),
+		sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32), "Game Client", sf::Style::Default & ~sf::Style::Resize),
 	m_thread(&GameClient::receiveStrings, this), m_screen(playerID)
 {
 	m_screen.loadBackground("Resources/grid.png");

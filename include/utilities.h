@@ -22,7 +22,7 @@ namespace dtn
 		static const int BOARD_WIDTH = 16;
 		static const int BOARD_HEIGHT = 16;
 		static const int BOARD_TOP = 1;
-		static const int BOARD_LEFT = 8;
+		static const int BOARD_LEFT = 1;
 		static int WINDOW_WIDTH;
 		static int WINDOW_HEIGHT;
 		static int PIXELS_PER_TILE_X;
