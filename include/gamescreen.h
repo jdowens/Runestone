@@ -23,6 +23,7 @@
 #include "event.h"
 #include "processmanager.h"
 #include "processmoverenderable.h"
+#include "processshakerenderable.h"
 #include "tooltip.h"
 
 namespace dtn

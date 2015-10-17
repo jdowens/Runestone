@@ -9,6 +9,8 @@
 #include<iostream>
 #include<vector>
 #include<cmath>
+#include<ctime>
+#include<cstdlib>
 
 // sfml includes
 #include<SFML/System/Vector2.hpp>
@@ -38,6 +40,9 @@ namespace dtn
 		static sf::Vector2i FloatVecToInt(sf::Vector2f vec);
 		static sf::Vector2f IntVecToFloat(sf::Vector2i vec);
 		static void OnResized(int w, int h);
+		static bool randInitialized;
+		static void initRandom();
+		static float randFloat(float min, float max);
 	};
 }
 #endif

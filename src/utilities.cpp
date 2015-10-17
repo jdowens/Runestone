@@ -4,6 +4,7 @@ int dtn::Utilities::WINDOW_WIDTH = 1280;
 int dtn::Utilities::WINDOW_HEIGHT = 720;
 int dtn::Utilities::PIXELS_PER_TILE_X = WINDOW_WIDTH / (2 * BOARD_LEFT + BOARD_WIDTH);
 int dtn::Utilities::PIXELS_PER_TILE_Y = WINDOW_HEIGHT / (2 * BOARD_TOP + BOARD_HEIGHT);
+bool dtn::Utilities::randInitialized = false;
 
 // PixelToTile
 /*
@@ -156,4 +157,22 @@ void dtn::Utilities::OnResized(int w, int h)
 	WINDOW_HEIGHT = h;
 	PIXELS_PER_TILE_X = WINDOW_WIDTH / (2 * BOARD_LEFT + BOARD_WIDTH);
 	PIXELS_PER_TILE_Y = WINDOW_HEIGHT / (2 * BOARD_TOP + BOARD_HEIGHT);
+}
+
+void dtn::Utilities::initRandom()
+{
+	std::srand(std::time(NULL));
+	randInitialized = true;
+}
+
+float dtn::Utilities::randFloat(float min, float max)
+{
+	if (!randInitialized)
+	{
+		initRandom();
+	}
+	float random = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
+	float diff = max - min;
+	float r = random*diff;
+	return min + r;
 }
