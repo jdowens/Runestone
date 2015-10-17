@@ -291,7 +291,7 @@ dtn::Event::EventType dtn::Event::stringToEventType(std::string str)
 		ret = dtn::Event::EventType::ENTITY_DRAWN;
 	else if (str == "MANA_CHANGED")
 		ret = dtn::Event::EventType::MANA_CHANGED;
-	else if (str == "EVENT_ENTITY_MOVE_FLAG_CHANGED")
+	else if (str == "ENTITY_MOVE_FLAG_CHANGED")
 		ret = dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED;
 	else
 		ret = dtn::Event::EventType::UNKNOWN;

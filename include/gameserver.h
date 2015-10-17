@@ -61,7 +61,10 @@ namespace dtn
 		void onRunestonePlay(std::shared_ptr<dtn::Event> e);
 		void onRunestoneAttack(std::shared_ptr<dtn::Event> e);
 		void onPlayerQuit(std::shared_ptr<dtn::Event> e);
+
+		// internal listeners
 		void onManaChanged(std::shared_ptr<dtn::Event> e);
+		void onEntityMoveFlagChanged(std::shared_ptr<dtn::Event> e);
 	};
 }
 

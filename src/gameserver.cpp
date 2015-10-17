@@ -44,6 +44,8 @@ dtn::GameServer::GameServer()
 	// listener for internal server events (to send to clients)
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::MANA_CHANGED,
 		std::bind(&GameServer::onManaChanged, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
+		std::bind(&GameServer::onEntityMoveFlagChanged, this, std::placeholders::_1));
 
 	m_running = true;
 }
@@ -121,6 +123,7 @@ void dtn::GameServer::onRunestoneMove(std::shared_ptr<dtn::Event> e)
 	{
 		std::shared_ptr<dtn::EntityBattlefield> rune =
 			m_battlefield.getEntityBattlefieldAt(cast->dest);
+		// an entity has moved
 		m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
 			new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
 	}
@@ -134,8 +137,10 @@ void dtn::GameServer::onRunestonePlay(std::shared_ptr<dtn::Event> e)
 	{
 		std::shared_ptr<dtn::EntityBattlefield> rune =
 			m_battlefield.getEntityBattlefieldAt(cast->dest);
+		// an entity has moved
 		m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
 			new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
+
 		std::vector<std::shared_ptr<dtn::Runestone>> vec =
 			m_players[m_currentPlayer - 1].getHand();
 		int count = 1;
@@ -183,6 +188,11 @@ void dtn::GameServer::onPlayerQuit(std::shared_ptr<dtn::Event> e)
 void dtn::GameServer::onManaChanged(std::shared_ptr<dtn::Event> e)
 {
 	// hand it over to the send channel
+	m_sendEventManager.pushEvent(e);
+}
+
+void dtn::GameServer::onEntityMoveFlagChanged(std::shared_ptr<dtn::Event> e)
+{
 	m_sendEventManager.pushEvent(e);
 }
 

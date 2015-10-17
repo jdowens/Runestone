@@ -1,4 +1,5 @@
 #include "entitybattlefield.h"
+#include "globaleventqueue.h"
 
 // initialize global EntityBattlefield counter
 int dtn::EntityBattlefield::m_battlefieldEntityCount = 0;
@@ -146,6 +147,10 @@ void dtn::EntityBattlefield::setHasAttacked(bool f)
 void dtn::EntityBattlefield::setHasMoved(bool f)
 {
 	m_hasMoved = f;
+
+	// update the entities move flag
+	dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<dtn::Event>(
+		new dtn::EventEntityMoveFlagChanged(m_entityID, m_hasMoved)));
 }
 
 // canMove
