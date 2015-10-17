@@ -65,7 +65,9 @@ namespace dtn
 		void onEntityMoved(std::shared_ptr<dtn::Event> e);
 		void onEntityBattle(std::shared_ptr<dtn::Event> e);
 		void onEntityAdded(std::shared_ptr<dtn::Event> e);
+		void onEntityMoveFlagChanged(std::shared_ptr<dtn::Event> e);
 
+		// old, not in use
 		void onAddRenderable(std::shared_ptr<dtn::Event> e);
 		void onMoveRenderable(std::shared_ptr<dtn::Event> e);
 		void onDeleteRenderable(std::shared_ptr<dtn::Event> e);

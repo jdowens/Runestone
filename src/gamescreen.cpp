@@ -15,6 +15,8 @@ dtn::GameScreen::GameScreen(std::shared_ptr<sf::Texture> background, int playerI
 		std::bind(&GameScreen::onEntityBattle, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_ADDED,
 		std::bind(&GameScreen::onEntityAdded, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
+		std::bind(&GameScreen::onEntityMoveFlagChanged, this, std::placeholders::_1));
 
 	/*dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ADD_RENDERABLE,
 		std::bind(&GameScreen::onAddRenderable, this, std::placeholders::_1));
@@ -45,6 +47,8 @@ dtn::GameScreen::GameScreen(int playerID)
 		std::bind(&GameScreen::onEntityBattle, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_ADDED,
 		std::bind(&GameScreen::onEntityAdded, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
+		std::bind(&GameScreen::onEntityMoveFlagChanged, this, std::placeholders::_1));
 
 	/*dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ADD_RENDERABLE,
 		std::bind(&GameScreen::onAddRenderable, this, std::placeholders::_1));
@@ -85,14 +89,21 @@ void dtn::GameScreen::render(sf::RenderWindow& window, int playerID)
 	for (std::map<int, std::shared_ptr<dtn::Renderable>>::iterator it = m_renderables.begin();
 		it != m_renderables.end(); ++it)
 	{
-		// color the sprites based on the owner
-		if (it->second->getOwner() == m_playerID)
+		if (it->second->getHasMoved())
 		{
-			it->second->getSprite().setColor(sf::Color::Blue);
+			it->second->getSprite().setColor(sf::Color::Yellow);
 		}
 		else
 		{
-			it->second->getSprite().setColor(sf::Color::Red);
+			// color the sprites based on the owner
+			if (it->second->getOwner() == m_playerID)
+			{
+				it->second->getSprite().setColor(sf::Color::Blue);
+			}
+			else
+			{
+				it->second->getSprite().setColor(sf::Color::Red);
+			}
 		}
 		window.draw(it->second->getSprite());
 	}
@@ -340,5 +351,19 @@ void dtn::GameScreen::onEntityAdded(std::shared_ptr<dtn::Event> e)
 		it->second->setLos(cast->los);
 		it->second->setOwner(cast->owner);
 		it->second->setToolTip(cast->tooltip);
+	}
+}
+
+void dtn::GameScreen::onEntityMoveFlagChanged(std::shared_ptr<dtn::Event> e)
+{
+	EventEntityMoveFlagChanged* cast = dynamic_cast<EventEntityMoveFlagChanged*>(e.get());
+	//std::cout << "IN ENTITY MOVE FLAG CHANGED!::::" << cast->entityID << '\n';
+	for (std::map<int, std::shared_ptr<dtn::Renderable>>::iterator it = m_renderables.begin();
+	it != m_renderables.end(); ++it)
+	{
+		if (it->second->getEntityID() == cast->entityID)
+		{
+			it->second->setHasMoved(cast->flag);
+		}
 	}
 }

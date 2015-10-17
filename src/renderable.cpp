@@ -9,6 +9,7 @@ dtn::Renderable::Renderable(int entityID, std::shared_ptr<sf::Texture> texture)
 	m_los = 0;
 	m_owner = 0;
 	m_tooltipData = "";
+	m_hasMoved = false;
 }
 
 // setLos

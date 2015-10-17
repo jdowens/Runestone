@@ -11,6 +11,7 @@ int dtn::EntityBattlefield::m_battlefieldEntityCount = 0;
 dtn::EntityBattlefield::EntityBattlefield(int count, dtn::Entity::EntityType type)
 	: Entity(count, type)
 {
+	m_hasMoved = false;
 	m_battlefieldEntityCount++;
 }
 
@@ -20,6 +21,7 @@ dtn::EntityBattlefield::EntityBattlefield(int count, dtn::Entity::EntityType typ
 */
 dtn::EntityBattlefield::EntityBattlefield()
 {
+	m_hasMoved = false;
 	m_battlefieldEntityCount++;
 }
 
