@@ -37,6 +37,7 @@ std::string dtn::Event::eventTypeToString(dtn::Event::EventType type)
 	case dtn::Event::EventType::ENTITY_MOVED: ret = "ENTITY_MOVED"; break;
 	case dtn::Event::EventType::ENTITY_BATTLE: ret = "ENTITY_BATTLE"; break;
 	case dtn::Event::EventType::ENTITY_DRAWN: ret = "ENTITY_DRAWN"; break;
+	case dtn::Event::EventType::MANA_CHANGED: ret = "MANA_CHANGED"; break;
 	case dtn::Event::EventType::UNKNOWN: ret = "UNKNOWN"; break;
 	}
 	return ret;
@@ -226,6 +227,14 @@ std::shared_ptr<dtn::Event> dtn::Event::stringToEvent(std::string str)
 			dstX, dstY), rendID));
 	}
 		break;
+	case dtn::Event::EventType::MANA_CHANGED:
+	{
+		int pID, newMana;
+		std::string str;
+		ss >> word >> pID >> word >> newMana;
+		ret = std::shared_ptr<dtn::Event>(new EventManaChanged(pID, newMana));
+	}
+		break;
 	}
 	return ret;
 }
@@ -272,6 +281,8 @@ dtn::Event::EventType dtn::Event::stringToEventType(std::string str)
 		ret = dtn::Event::EventType::ENTITY_BATTLE;
 	else if (str == "ENTITY_DRAWN")
 		ret = dtn::Event::EventType::ENTITY_DRAWN;
+	else if (str == "MANA_CHANGED")
+		ret = dtn::Event::EventType::MANA_CHANGED;
 	else
 		ret = dtn::Event::EventType::UNKNOWN;
 	return ret;
@@ -612,5 +623,21 @@ std::string dtn::EventEntityDrawn::toString()
 	ss << "SOURCE: " << source.x << ' ' << source.y << '\n';
 	ss << "POSITION: " << dest.x << ' ' << dest.y << '\n';
 	ss << "RENDERABLE_ID: " << renderableID << '\n';
+	return ss.str();
+}
+
+dtn::EventManaChanged::EventManaChanged(int pID, int newMana)
+	: dtn::Event(dtn::Event::EventType::MANA_CHANGED)
+{
+	playerID = pID;
+	newManaValue = newMana;
+}
+
+std::string dtn::EventManaChanged::toString()
+{
+	std::stringstream ss;
+	ss << "EVENT_TYPE: " << eventTypeToString(m_type) << '\n';
+	ss << "PLAYER_ID: " << playerID << '\n';
+	ss << "NEW_MANA_VALUE: " << newManaValue << '\n';
 	return ss.str();
 }

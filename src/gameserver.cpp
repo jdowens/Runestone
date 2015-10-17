@@ -24,9 +24,12 @@ dtn::GameServer::GameServer()
 		dtn::Utilities::BOARD_TOP));
 
 	// register listeners
+
+	// send
 	m_sendEventManager.attachListener(dtn::Event::EventType::ALL_EVENTS,
 		std::bind(&GameServer::sendCom, this, std::placeholders::_1));
 
+	// receive
 	m_receiveEventManager.attachListener(dtn::Event::EventType::END_TURN,
 		std::bind(&GameServer::onEndTurn, this, std::placeholders::_1));
 	m_receiveEventManager.attachListener(dtn::Event::EventType::RUNESTONE_ATTACK,
@@ -37,6 +40,11 @@ dtn::GameServer::GameServer()
 		std::bind(&GameServer::onRunestonePlay, this, std::placeholders::_1));
 	m_receiveEventManager.attachListener(dtn::Event::EventType::GAME_QUIT,
 		std::bind(&GameServer::onPlayerQuit, this, std::placeholders::_1));
+
+	// listener for internal server events (to send to clients)
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::MANA_CHANGED,
+		std::bind(&GameServer::onManaChanged, this, std::placeholders::_1));
+
 	m_running = true;
 }
 
@@ -86,6 +94,8 @@ void dtn::GameServer::update()
 		initializeBases();
 		m_turnCount++;
 	}
+	// shift any internal events to the send queue
+	dtn::GlobalEventQueue::getInstance()->update();
 	// send the waiting events
 	m_sendEventManager.update();
 }
@@ -165,6 +175,12 @@ void dtn::GameServer::onRunestoneAttack(std::shared_ptr<dtn::Event> e)
 void dtn::GameServer::onPlayerQuit(std::shared_ptr<dtn::Event> e)
 {
 	m_running = false;
+}
+
+void dtn::GameServer::onManaChanged(std::shared_ptr<dtn::Event> e)
+{
+	// hand it over to the send channel
+	m_sendEventManager.pushEvent(e);
 }
 
 // draw

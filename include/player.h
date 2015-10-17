@@ -20,6 +20,8 @@
 #include "playerhand.h"
 #include "playerdeck.h"
 #include "runestone.h"
+#include "event.h"
+#include "globaleventqueue.h"
 
 namespace dtn
 {
@@ -67,6 +69,7 @@ namespace dtn
 		int m_playerID;					// player identification number
 		int m_currentMana;				// current mana
 		int m_maxMana;					// maximum mana
+		void changeCurrentMana(int newAmount);		// interface to change mana value
 		dtn::PlayerDeck m_deck;			// deck of runestones
 		dtn::PlayerHand m_hand;			// hand of runestones
 	};

@@ -46,6 +46,7 @@ namespace dtn
 			ENTITY_MOVED = 0x11,
 			ENTITY_BATTLE = 0x12,
 			ENTITY_DRAWN = 0x13,
+			MANA_CHANGED = 0x14,
 			ALL_EVENTS = 0xFE
 			// REMEBER UPDATE STEPS 1 2 3 4 (step 4 in eventmanager.cpp)
 		};
@@ -268,6 +269,16 @@ namespace dtn
 		sf::Vector2i source;
 		sf::Vector2i dest;
 		int renderableID;
+	};
+
+	//EventManaChanged
+	// signals that a player's mana has changed
+	struct EventManaChanged : public Event
+	{
+		EventManaChanged(int pID, int newMana);
+		virtual std::string toString();
+		int playerID;
+		int newManaValue;
 	};
 }
 

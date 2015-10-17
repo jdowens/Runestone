@@ -19,6 +19,7 @@
 #include "event.h"
 #include "player.h"
 #include "battlefield.h"
+#include "globaleventqueue.h"
 
 namespace dtn
 {
@@ -60,6 +61,7 @@ namespace dtn
 		void onRunestonePlay(std::shared_ptr<dtn::Event> e);
 		void onRunestoneAttack(std::shared_ptr<dtn::Event> e);
 		void onPlayerQuit(std::shared_ptr<dtn::Event> e);
+		void onManaChanged(std::shared_ptr<dtn::Event> e);
 	};
 }
 

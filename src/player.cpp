@@ -6,7 +6,7 @@ dtn::Player::Player(int id)
 {
 	m_playerID = id;
 	m_maxMana = 1;
-	m_currentMana = m_maxMana;
+	changeCurrentMana(m_maxMana);
 }
 
 // loadDeckFromFile
@@ -109,7 +109,7 @@ bool dtn::Player::draw()
 */
 std::shared_ptr<dtn::EntityBattlefield> dtn::Player::playRunestone(std::shared_ptr<dtn::Runestone> runestone)
 {
-	m_currentMana -= runestone->getCost();
+	changeCurrentMana(m_currentMana - runestone->getCost());
 	return m_hand.playRunestone(runestone);
 }
 
@@ -208,7 +208,7 @@ void dtn::Player::increaseMana(int n)
 */
 void dtn::Player::resetCurrentMana()
 {
-	m_currentMana = m_maxMana;
+	changeCurrentMana(m_maxMana);
 }
 
 // toString
@@ -291,4 +291,20 @@ void dtn::Player::render(sf::RenderWindow& window)
 {
 	m_deck.render(window);
 	m_hand.render(window);
+}
+
+// changeCurrentMana
+/*
+	Interface to change the mana of the player (includes sending an event that it has
+	changed).
+*/
+void dtn::Player::changeCurrentMana(int amount)
+{
+	m_currentMana = amount;
+	if (m_currentMana > m_maxMana)
+		m_currentMana = m_maxMana;
+	else if (m_currentMana < 0)
+		m_currentMana = 0;
+	dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<dtn::Event>(
+		new dtn::EventManaChanged(m_playerID, m_currentMana)));
 }
