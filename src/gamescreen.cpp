@@ -268,7 +268,7 @@ void dtn::GameScreen::onEntityDrawn(std::shared_ptr<dtn::Event> e)
 		std::shared_ptr<dtn::Process> process =
 			std::shared_ptr<dtn::ProcessMoveRenderable>(new ProcessMoveRenderable(
 			it->second, dtn::Utilities::TileToFloat(dtn::Utilities::LocalTileToGlobal(
-			cast->dest, m_playerID)), 400.f));
+			cast->dest, m_playerID)), 600.f));
 		m_processManager.attachProcess(process);
 	}
 }
@@ -292,7 +292,7 @@ void dtn::GameScreen::onEntityMoved(std::shared_ptr<dtn::Event> e)
 		std::shared_ptr<dtn::Process> process =
 			std::shared_ptr<dtn::ProcessMoveRenderable>(new ProcessMoveRenderable(
 			it->second, dtn::Utilities::TileToFloat(dtn::Utilities::LocalTileToGlobal(
-			cast->dest, m_playerID)), 200.f));
+			cast->dest, m_playerID)), 600.f));
 		m_processManager.attachProcess(process);
 		it->second->setToolTip(cast->tooltip);
 	}
