@@ -30,11 +30,13 @@ namespace dtn
 		std::shared_ptr<sfg::Box> m_guiLayout;
 		std::shared_ptr<sfg::Label> m_playerManaText;
 		std::shared_ptr<sfg::Label> m_opponentManaText;
+		std::shared_ptr<sfg::Button> m_endTurnButton;
 		void setPlayerManaText(int amount);
 		void setOpponentManaText(int amount);
 
 		// listeners
 		void onManaChanged(std::shared_ptr<dtn::Event> e);
+		void onEndTurnButtonClicked();
 	};
 }
 

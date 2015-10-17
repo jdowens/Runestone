@@ -9,9 +9,19 @@ dtn::HUD::HUD(int player_ID)
 	// setup gui layour
 	m_window = sfg::Window::Create();
 	m_guiLayout = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
+
+	// setup labels
 	m_playerManaText = sfg::Label::Create();
 	m_opponentManaText = sfg::Label::Create();
+
+	// setup button
+	m_endTurnButton = sfg::Button::Create("End Turn");
+	m_endTurnButton->GetSignal(sfg::Button::OnLeftClick).Connect(
+		std::bind(&HUD::onEndTurnButtonClicked, this));
+
+	// pack the gui
 	m_guiLayout->Pack(m_opponentManaText);
+	m_guiLayout->Pack(m_endTurnButton);
 	m_guiLayout->Pack(m_playerManaText);
 	m_window->Add(m_guiLayout);
 	m_window->SetPosition(sf::Vector2f((dtn::Utilities::BOARD_LEFT + dtn::Utilities::BOARD_WIDTH)*
@@ -65,4 +75,10 @@ void dtn::HUD::onManaChanged(std::shared_ptr<dtn::Event> e)
 		setPlayerManaText(cast->newManaValue);
 	else
 		setOpponentManaText(cast->newManaValue);
+}
+
+void dtn::HUD::onEndTurnButtonClicked()
+{
+	dtn::GlobalEventQueue::getInstance()->pushEvent(
+		std::shared_ptr<dtn::Event>(new dtn::EventEndTurn(m_playerID)));
 }
