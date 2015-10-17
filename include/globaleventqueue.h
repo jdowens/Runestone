@@ -19,6 +19,7 @@ namespace dtn
 			std::shared_ptr<dtn::Event>)> f);
 		void removeListener(int id);
 		void pushEvent(std::shared_ptr<dtn::Event> e);
+		bool pendingEvents();
 	private:
 		GlobalEventQueue();
 		static std::shared_ptr<dtn::GlobalEventQueue> m_instance;

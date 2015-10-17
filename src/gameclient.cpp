@@ -53,6 +53,10 @@ void dtn::GameClient::run()
 	{
 		update();
 	}
+	if (dtn::GlobalEventQueue::getInstance()->pendingEvents())
+	{
+		dtn::GlobalEventQueue::getInstance()->update();
+	}
 	m_window.close();
 	m_thread.terminate();
 }

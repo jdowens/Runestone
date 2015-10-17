@@ -34,3 +34,8 @@ void dtn::GlobalEventQueue::pushEvent(std::shared_ptr<dtn::Event> e)
 {
 	m_eventmanager.pushEvent(e);
 }
+
+bool dtn::GlobalEventQueue::pendingEvents()
+{
+	return m_eventmanager.pendingEvents();
+}
