@@ -321,11 +321,13 @@ void dtn::GameScreen::onEntityBattle(std::shared_ptr<dtn::Event> e)
 		if (cast->attackerDead)
 			removeRenderable(cast->attackerEntityID);
 		else
-			m_processManager.attachProcess(std::shared_ptr<dtn::Process>(new ProcessShakeRenderable(it1->second, sf::Vector2f(5.0f, 5.0f), 0.25f)));
+			m_processManager.attachProcess(std::shared_ptr<dtn::Process>(
+				new ProcessShakeRenderable(it1->second, sf::Vector2f(10.0f, 10.0f), 0.35f)));
 		if (cast->defenderDead)
 			removeRenderable(cast->defenderEntityID);
 		else
-			m_processManager.attachProcess(std::shared_ptr<dtn::Process>(new ProcessShakeRenderable(it2->second, sf::Vector2f(5.0f, 5.0f), 0.25f)));
+			m_processManager.attachProcess(std::shared_ptr<dtn::Process>(
+				new ProcessShakeRenderable(it2->second, sf::Vector2f(10.0f, 10.0f), 0.35f)));
 	}
 }
 
