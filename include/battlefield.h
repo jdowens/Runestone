@@ -40,6 +40,9 @@ namespace dtn
 		bool canMoveEntityBattlefield(sf::Vector2i source, sf::Vector2i dest, int playerID);
 		void attackEntityBattlefield(sf::Vector2i source, sf::Vector2i dest);
 		bool canAttackEntityBattlefield(sf::Vector2i source, sf::Vector2i dest, int playerID);
+		
+		// pathfinding functions
+		std::vector<sf::Vector2i> getValidMoveLocations(sf::Vector2i entPosition);
 
 		// entity polling and reset functions
 		std::shared_ptr<EntityBattlefield> getEntityBattlefieldAt(sf::Vector2i position);
@@ -66,6 +69,8 @@ namespace dtn
 		std::vector<sf::IntRect> m_playLocations;	
 		// vector of played EntityBattlefields
 		std::vector<std::shared_ptr<EntityBattlefield>> m_placedEntityBattlefields;
+		// pathfinding recursive function
+		void determineValidMoveLocations(sf::Vector2i curPos, int distTraveled, int Range, std::vector<sf::Vector2i>& list);
 	};
 }
 

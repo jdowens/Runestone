@@ -168,6 +168,18 @@ bool dtn::Battlefield::canAttackEntityBattlefield(sf::Vector2i source, sf::Vecto
 	return false;
 }
 
+std::vector<sf::Vector2i> dtn::Battlefield::getValidMoveLocations(sf::Vector2i entPosition)
+{
+	std::vector<sf::Vector2i> ret;
+	auto ent = getEntityBattlefieldAt(entPosition);
+	if (ent.get() != NULL)
+	{
+		int distTraveled = 0;
+		determineValidMoveLocations(entPosition, distTraveled, ent->getSpeed(), ret);
+	}
+	return ret;
+}
+
 // getEntityBattlefieldAt
 /*
 	Grab the entity at a given vector.
@@ -311,6 +323,62 @@ void dtn::Battlefield::render(sf::RenderWindow& window, int playerID)
 				window.draw(rect);
 			}
 
+		}
+	}
+}
+
+void dtn::Battlefield::determineValidMoveLocations(sf::Vector2i curPos, int distTraveled, int range, std::vector<sf::Vector2i>& list)
+{
+	sf::Vector2i left(curPos.x - 1, curPos.y);
+	sf::Vector2i right(curPos.x + 1, curPos.y);
+	sf::Vector2i up(curPos.x, curPos.y - 1);
+	sf::Vector2i down(curPos.x, curPos.y + 1);
+	// check left
+	if (left.x >= dtn::Utilities::BOARD_LEFT && getEntityBattlefieldAt(sf::Vector2i(left.x, left.y)).get() == NULL)
+	{
+		if (std::find(list.begin(), list.end(), sf::Vector2i(left.x, left.y)) == list.end())
+		{
+			list.push_back(sf::Vector2i(left.x, left.y));
+		}
+		if (distTraveled + 1 < range)
+		{
+			determineValidMoveLocations(left, distTraveled + 1, range, list);
+		}
+	}
+	// check right
+	if (right.x < (dtn::Utilities::BOARD_WIDTH + dtn::Utilities::BOARD_LEFT) && getEntityBattlefieldAt(sf::Vector2i(right.x, right.y)).get() == NULL)
+	{
+		if (std::find(list.begin(), list.end(), sf::Vector2i(right.x, right.y)) == list.end())
+		{
+			list.push_back(sf::Vector2i(right.x, right.y));
+		}
+		if (distTraveled + 1 < range)
+		{
+			determineValidMoveLocations(right, distTraveled + 1, range, list);
+		}
+	}
+	// check up
+	if (up.y >= dtn::Utilities::BOARD_TOP && getEntityBattlefieldAt(sf::Vector2i(up.x, up.y)).get() == NULL)
+	{
+		if (std::find(list.begin(), list.end(), sf::Vector2i(up.x, up.y)) == list.end())
+		{
+			list.push_back(sf::Vector2i(up.x, up.y));
+		}
+		if (distTraveled + 1 < range)
+		{
+			determineValidMoveLocations(up, distTraveled + 1, range, list);
+		}
+	}
+	// check down
+	if (down.y < (dtn::Utilities::BOARD_HEIGHT + dtn::Utilities::BOARD_TOP) && getEntityBattlefieldAt(sf::Vector2i(down.x, down.y)).get() == NULL)
+	{
+		if (std::find(list.begin(), list.end(), sf::Vector2i(down.x, down.y)) == list.end())
+		{
+			list.push_back(sf::Vector2i(down.x, down.y));
+		}
+		if (distTraveled + 1 < range)
+		{
+			determineValidMoveLocations(down, distTraveled + 1, range, list);
 		}
 	}
 }
