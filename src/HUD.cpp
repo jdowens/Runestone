@@ -5,6 +5,8 @@ dtn::HUD::HUD(int player_ID)
 	m_playerID = player_ID;
 	m_playerMana = 0;
 	m_opponentMana = 0;
+
+	// setup gui layour
 	m_window = sfg::Window::Create();
 	m_guiLayout = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
 	m_playerManaText = sfg::Label::Create();
@@ -17,8 +19,14 @@ dtn::HUD::HUD(int player_ID)
 	m_window->SetRequisition(sf::Vector2f(dtn::Utilities::BOARD_LEFT*dtn::Utilities::PIXELS_PER_TILE_X,
 		(dtn::Utilities::BOARD_TOP * 2 + dtn::Utilities::BOARD_HEIGHT)*dtn::Utilities::PIXELS_PER_TILE_Y));
 	m_window->SetStyle(m_window->GetStyle() & ~sfg::Window::Style::RESIZE);
+
+	// initialize mana text
 	setPlayerManaText(0);
 	setOpponentManaText(0);
+
+	// setup listeners
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::MANA_CHANGED,
+		std::bind(&HUD::onManaChanged, this, std::placeholders::_1));
 }
 
 void dtn::HUD::update(float dt)
@@ -48,4 +56,13 @@ void dtn::HUD::setOpponentManaText(int amount)
 	std::stringstream ss;
 	ss << "Your opponent's mana: " << amount;
 	m_opponentManaText->SetText(ss.str());
+}
+
+void dtn::HUD::onManaChanged(std::shared_ptr<dtn::Event> e)
+{
+	EventManaChanged* cast = dynamic_cast<EventManaChanged*>(e.get());
+	if (cast->playerID == m_playerID)
+		setPlayerManaText(cast->newManaValue);
+	else
+		setOpponentManaText(cast->newManaValue);
 }

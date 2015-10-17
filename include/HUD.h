@@ -8,6 +8,8 @@
 #include<SFGUI/SFGUI.hpp>
 #include<SFGUI/Widgets.hpp>
 
+#include "globaleventqueue.h"
+#include "event.h"
 #include "utilities.h"
 
 namespace dtn
@@ -30,6 +32,9 @@ namespace dtn
 		std::shared_ptr<sfg::Label> m_opponentManaText;
 		void setPlayerManaText(int amount);
 		void setOpponentManaText(int amount);
+
+		// listeners
+		void onManaChanged(std::shared_ptr<dtn::Event> e);
 	};
 }
 
