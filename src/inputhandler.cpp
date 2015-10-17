@@ -37,8 +37,23 @@ void dtn::InputHandler::update(sf::RenderWindow& window, dtn::GameScreen& screen
 
 void dtn::InputHandler::updateHovered(dtn::GameScreen& screen)
 {
+	// cache last hovered piece to check if hovered piece has changed since last movement
+	auto cache = m_hovered;
 	m_hovered = NULL;
 	m_hovered = screen.getRenderableAt(m_mousePos);
+
+	// request movement decal if necessary
+	if (m_hovered != cache && m_hovered != NULL)
+	{
+		if (!m_hovered->getHasMoved())
+		{
+			dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<Event>(
+				new EventRequestEntityMoveDecal(m_playerID,
+					dtn::Utilities::MouseToGlobalTile(dtn::Utilities::FloatVecToInt(
+						m_hovered->getSprite().getPosition()), m_playerID))));
+		}
+	}
+
 	if (m_hovered != NULL)
 	{
 		screen.m_tooltip.update(m_mousePos, m_hovered->getToolTip());

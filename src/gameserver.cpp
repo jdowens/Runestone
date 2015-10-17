@@ -29,6 +29,12 @@ dtn::GameServer::GameServer()
 	m_sendEventManager.attachListener(dtn::Event::EventType::ALL_EVENTS,
 		std::bind(&GameServer::sendCom, this, std::placeholders::_1));
 
+	// send exclusive
+	m_exclusiveP1SendManager.attachListener(dtn::Event::EventType::ALL_EVENTS,
+		std::bind(&GameServer::sendP1Com, this, std::placeholders::_1));
+	m_exclusiveP2SendManager.attachListener(dtn::Event::EventType::ALL_EVENTS,
+		std::bind(&GameServer::sendP2Com, this, std::placeholders::_1));
+
 	// receive
 	m_receiveEventManager.attachListener(dtn::Event::EventType::END_TURN,
 		std::bind(&GameServer::onEndTurn, this, std::placeholders::_1));
@@ -40,6 +46,8 @@ dtn::GameServer::GameServer()
 		std::bind(&GameServer::onRunestonePlay, this, std::placeholders::_1));
 	m_receiveEventManager.attachListener(dtn::Event::EventType::GAME_QUIT,
 		std::bind(&GameServer::onPlayerQuit, this, std::placeholders::_1));
+	m_receiveEventManager.attachListener(dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL,
+		std::bind(&GameServer::onRequestEntityMoveDecal, this, std::placeholders::_1));
 
 	// listener for internal server events (to send to clients)
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::MANA_CHANGED,
@@ -77,6 +85,14 @@ void dtn::GameServer::run()
 	{
 		m_sendEventManager.update();
 	}
+	if (m_exclusiveP1SendManager.pendingEvents())
+	{
+		m_exclusiveP1SendManager.update();
+	}
+	if (m_exclusiveP2SendManager.pendingEvents())
+	{
+		m_exclusiveP2SendManager.update();
+	}
 	m_thread1.terminate();
 	m_thread2.terminate();
 }
@@ -103,6 +119,8 @@ void dtn::GameServer::update()
 	dtn::GlobalEventQueue::getInstance()->update();
 	// send the waiting events
 	m_sendEventManager.update();
+	m_exclusiveP1SendManager.update();
+	m_exclusiveP2SendManager.update();
 }
 
 // event listeners below
@@ -183,6 +201,23 @@ void dtn::GameServer::onRunestoneAttack(std::shared_ptr<dtn::Event> e)
 void dtn::GameServer::onPlayerQuit(std::shared_ptr<dtn::Event> e)
 {
 	m_running = false;
+}
+
+void dtn::GameServer::onRequestEntityMoveDecal(std::shared_ptr<dtn::Event> e)
+{
+	auto cast = dynamic_cast<EventRequestEntityMoveDecal*>(e.get());
+	std::vector<sf::Vector2i> locs =
+		m_battlefield.getValidMoveLocations(cast->source);
+	if (cast->playerID == 1)
+	{
+		m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+			new EventReceivedEntityMoveDecal(locs)));
+	}
+	else
+	{
+		m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+			new EventReceivedEntityMoveDecal(locs)));
+	}
 }
 
 void dtn::GameServer::onManaChanged(std::shared_ptr<dtn::Event> e)
@@ -302,5 +337,23 @@ void dtn::GameServer::sendCom(std::shared_ptr<dtn::Event> e)
 	std::cout << str.c_str() << '\n';
 	packet << str;
 	m_p1Socket.send(packet);
+	m_p2Socket.send(packet);
+}
+
+void dtn::GameServer::sendP1Com(std::shared_ptr<dtn::Event> e)
+{
+	sf::Packet packet;
+	std::string str = e->toString();
+	std::cout << str.c_str() << '\n';
+	packet << str;
+	m_p1Socket.send(packet);
+}
+
+void dtn::GameServer::sendP2Com(std::shared_ptr<dtn::Event> e)
+{
+	sf::Packet packet;
+	std::string str = e->toString();
+	std::cout << str.c_str() << '\n';
+	packet << str;
 	m_p2Socket.send(packet);
 }

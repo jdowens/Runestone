@@ -215,6 +215,8 @@ void dtn::GameScreen::initializeListeners()
 		std::bind(&GameScreen::onEntityAdded, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
 		std::bind(&GameScreen::onEntityMoveFlagChanged, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL,
+		std::bind(&GameScreen::onReceivedEntityMoveDecal, this, std::placeholders::_1));
 }
 
 void dtn::GameScreen::onEntityDrawn(std::shared_ptr<dtn::Event> e)
@@ -349,5 +351,15 @@ void dtn::GameScreen::onEntityMoveFlagChanged(std::shared_ptr<dtn::Event> e)
 		{
 			it->second->setHasMoved(cast->flag);
 		}
+	}
+}
+
+void dtn::GameScreen::onReceivedEntityMoveDecal(std::shared_ptr<dtn::Event> e)
+{
+	auto cast = dynamic_cast<dtn::EventReceivedEntityMoveDecal*>(e.get());
+	if (cast->movementLocations.size() != 0)
+	{
+		m_movementDecal.setLocations(cast->movementLocations);
+		m_movementDecal.setVisible();
 	}
 }

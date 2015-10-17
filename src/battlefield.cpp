@@ -184,7 +184,7 @@ std::vector<sf::Vector2i> dtn::Battlefield::getValidMoveLocations(sf::Vector2i e
 {
 	std::vector<sf::Vector2i> ret;
 	auto ent = getEntityBattlefieldAt(entPosition);
-	if (ent.get() != NULL)
+	if (ent.get() != NULL && ent->getSpeed() > 0)
 	{
 		int distTraveled = 0;
 		determineValidMoveLocations(entPosition, distTraveled, ent->getSpeed(), ret);

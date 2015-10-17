@@ -35,6 +35,9 @@ dtn::GameClient::GameClient(int playerID, std::string ip)
 		std::bind(&GameClient::sendString, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::GAME_QUIT,
 		std::bind(&GameClient::sendString, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL,
+		std::bind(&GameClient::sendString, this, std::placeholders::_1));
+
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::GAME_QUIT,
 		std::bind(&GameClient::onGameQuit, this, std::placeholders::_1));
 	m_ip = ip;

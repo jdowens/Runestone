@@ -256,13 +256,15 @@ std::shared_ptr<dtn::Event> dtn::Event::stringToEvent(std::string str)
 	case dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL:
 	{
 		std::vector<sf::Vector2i> locs;
-		ss >> word;
-		while (ss)
+		int list_size;
+		ss >> word >> list_size;
+		for (int i = 0; i < list_size; i++)
 		{
 			sf::Vector2i tmp;
 			ss >> tmp.x >> tmp.y;
 			locs.push_back(tmp);
 		}
+		ret = std::shared_ptr<dtn::Event>(new EventReceivedEntityMoveDecal(locs));
 	}
 		break;
 	}
@@ -705,8 +707,8 @@ std::string dtn::EventRequestEntityMoveDecal::toString()
 {
 	std::stringstream ss;
 	ss << "EVENT_TYPE: " << eventTypeToString(m_type) << '\n';
-	ss << "PLAYER_ID: " << playerID;
-	ss << "SOURCE: " << source.x << ' ' << source.y;
+	ss << "PLAYER_ID: " << playerID << '\n';
+	ss << "SOURCE: " << source.x << ' ' << source.y << '\n';
 	return ss.str();
 }
 
@@ -723,7 +725,7 @@ std::string dtn::EventReceivedEntityMoveDecal::toString()
 {
 	std::stringstream ss;
 	ss << "EVENT_TYPE: " << eventTypeToString(m_type) << '\n';
-	ss << "LIST_BEGIN:";
+	ss << "LIST_SIZE: " << movementLocations.size();
 	for (auto it = movementLocations.begin(); it != movementLocations.end(); ++it)
 	{
 		ss << '\n' <<  it->x << ' ' << it->y;

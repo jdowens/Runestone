@@ -51,9 +51,14 @@ namespace dtn
 		void p1Com();										// receive channel 1
 		void p2Com();										// receive channel 2
 		void sendCom(std::shared_ptr<dtn::Event> e);		// send channel (global)
+		void sendP1Com(std::shared_ptr<dtn::Event> e);		// send channel p1 only
+		void sendP2Com(std::shared_ptr<dtn::Event> e);		// send channel p2 only
 
 		dtn::EventManager m_sendEventManager;						// dual event managers (to handle sent/received events)
 		dtn::EventManager m_receiveEventManager;
+			
+		dtn::EventManager m_exclusiveP1SendManager;					// single channel send managers
+		dtn::EventManager m_exclusiveP2SendManager;
 
 		// listeners
 		void onEndTurn(std::shared_ptr<dtn::Event> e);
@@ -61,6 +66,7 @@ namespace dtn
 		void onRunestonePlay(std::shared_ptr<dtn::Event> e);
 		void onRunestoneAttack(std::shared_ptr<dtn::Event> e);
 		void onPlayerQuit(std::shared_ptr<dtn::Event> e);
+		void onRequestEntityMoveDecal(std::shared_ptr<dtn::Event> e);
 
 		// internal listeners
 		void onManaChanged(std::shared_ptr<dtn::Event> e);
