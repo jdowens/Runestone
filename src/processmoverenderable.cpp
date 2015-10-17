@@ -22,6 +22,7 @@ dtn::ProcessMoveRenderable::ProcessMoveRenderable(
 */
 bool dtn::ProcessMoveRenderable::update(float dt)
 {
+	// deal with easing
 	float remDist = remainingDistance();
 	if (remDist < 0.45*m_distanceEstimate)
 	{
@@ -59,6 +60,38 @@ bool dtn::ProcessMoveRenderable::update(float dt)
 		std::cout << "DELTA TIME TOO GREAT IN MOVE RENDERABLE: \n";
 		std::cout << m_renderable->getEntityID() << '\n';
 		std::cout << dt << "\n\n";
+		newPosition.x = static_cast<float>(m_destination.x);
+		newPosition.y = static_cast<float>(m_destination.y);
+		m_dead = true;
+	}
+	// if moving right and higher than x pos snap to pos
+	else if (m_direction.x > 0 && newPosition.x > m_destination.x)
+	{
+		std::cout << "MOVED PAST IN POSITIVE X DIRECTION IN MOVE RENDERABLE: " << '\n';
+		newPosition.x = static_cast<float>(m_destination.x);
+		newPosition.y = static_cast<float>(m_destination.y);
+		m_dead = true;
+	}
+	// if moving left and lower than x pos snap to pos
+	else if (m_direction.x < 0 && newPosition.x < m_destination.x)
+	{
+		std::cout << "MOVED PAST IN NEGATIVE X DIRECTION IN MOVE RENDERABLE: " << '\n';
+		newPosition.x = static_cast<float>(m_destination.x);
+		newPosition.y = static_cast<float>(m_destination.y);
+		m_dead = true;
+	}
+	// if moving down and higher than y pos snap to pos
+	else if (m_direction.y > 0 && newPosition.y > m_destination.y)
+	{
+		std::cout << "MOVED PAST IN POSITIVE Y DIRECTION IN MOVE RENDERABLE: " << '\n';
+		newPosition.x = static_cast<float>(m_destination.x);
+		newPosition.y = static_cast<float>(m_destination.y);
+		m_dead = true;
+	}
+	// if moving up and lower than y pos snap to pos
+	else if (m_direction.y < 0 && newPosition.x < m_destination.x)
+	{
+		std::cout << "MOVED PAST IN NEGATIVE Y DIRECTION IN MOVE RENDERABLE: " << '\n';
 		newPosition.x = static_cast<float>(m_destination.x);
 		newPosition.y = static_cast<float>(m_destination.y);
 		m_dead = true;
