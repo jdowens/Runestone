@@ -87,7 +87,8 @@ bool dtn::Battlefield::canMoveEntityBattlefield(std::shared_ptr<dtn::EntityBattl
 	// if the destination is inside the board area and the entity can move
 	if (m_boardArea.contains(dest) && ent->canMove())
 	{
-		std::shared_ptr<EntityBattlefield> destEnt = getEntityBattlefieldAt(dest);
+		// old absolute distance pathfinding
+		/*std::shared_ptr<EntityBattlefield> destEnt = getEntityBattlefieldAt(dest);
 		int distance = dtn::Utilities::TileDistance(ent->getBounds(), dest);
 		// if destination is empty
 		if (destEnt == NULL)
@@ -97,6 +98,11 @@ bool dtn::Battlefield::canMoveEntityBattlefield(std::shared_ptr<dtn::EntityBattl
 			{
 				return true;
 			}
+		}*/
+		std::vector<sf::Vector2i> paths = getValidMoveLocations(ent->getTilePos());
+		if (std::find(paths.begin(), paths.end(), dest) != paths.end())
+		{
+			return true;
 		}
 	}
 	return false;
@@ -116,7 +122,8 @@ bool dtn::Battlefield::canMoveEntityBattlefield(sf::Vector2i source, sf::Vector2
 		// if player actually owns entity
 		if (ent->getOwner() == playerID)
 		{
-			std::shared_ptr<EntityBattlefield> destEnt = getEntityBattlefieldAt(dest);
+			// old absolute distance pathfinding
+			/*std::shared_ptr<EntityBattlefield> destEnt = getEntityBattlefieldAt(dest);
 			int distance = dtn::Utilities::TileDistance(ent->getBounds(), dest);
 			// if dest is empty
 			if (destEnt == NULL)
@@ -126,6 +133,11 @@ bool dtn::Battlefield::canMoveEntityBattlefield(sf::Vector2i source, sf::Vector2
 				{
 					return true;
 				}
+			}*/
+			std::vector<sf::Vector2i> paths = getValidMoveLocations(source);
+			if (std::find(paths.begin(), paths.end(), dest) != paths.end())
+			{
+				return true;
 			}
 		}
 	}
