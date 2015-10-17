@@ -19,7 +19,7 @@ namespace dtn
 		void update(sf::RenderWindow& window, dtn::GameScreen& screen, dtn::HUD& HUD);
 	private :
 		void updateHovered(dtn::GameScreen& screen);
-		void handleEvents(sf::RenderWindow& window, dtn::HUD& HUD);
+		void handleEvents(sf::RenderWindow& window, dtn::GameScreen& screen, dtn::HUD& HUD);
 		sf::Vector2i m_mousePos;
 		std::shared_ptr<dtn::Renderable> m_hovered;
 		std::shared_ptr<dtn::Renderable> m_selected;

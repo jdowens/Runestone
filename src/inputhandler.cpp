@@ -32,7 +32,7 @@ void dtn::InputHandler::update(sf::RenderWindow& window, dtn::GameScreen& screen
 {
 	m_mousePos = sf::Mouse::getPosition(window);
 	updateHovered(screen);
-	handleEvents(window, HUD);
+	handleEvents(window, screen, HUD);
 }
 
 void dtn::InputHandler::updateHovered(dtn::GameScreen& screen)
@@ -62,11 +62,15 @@ void dtn::InputHandler::updateHovered(dtn::GameScreen& screen)
 	else
 	{
 		screen.m_tooltip.setInvisible();
-		screen.m_movementDecal.setInvisible();
+		if (m_selected == NULL)
+		{
+			screen.m_movementDecal.setInvisible();
+		}
 	}
 }
 
-void dtn::InputHandler::handleEvents(sf::RenderWindow& window, dtn::HUD& hud)
+void dtn::InputHandler::handleEvents(sf::RenderWindow& window, dtn::GameScreen& screen, 
+	dtn::HUD& hud)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
@@ -119,6 +123,7 @@ void dtn::InputHandler::handleEvents(sf::RenderWindow& window, dtn::HUD& hud)
 				{
 					dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<dtn::Event>(
 						new dtn::EventRunestoneMove(sourcePos, destPos)));
+					screen.m_movementDecal.setInvisible();
 				}
 			}
 			m_selected = NULL;
