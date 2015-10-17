@@ -56,6 +56,15 @@ void dtn::EventManager::update()
 	}
 }
 
+// pendingEvents
+/*
+	Returns true if there are pending events in the queue
+*/
+bool dtn::EventManager::pendingEvents()
+{
+	return m_pendingEvents.size() > 0;
+}
+
 // attachListener
 /*
 	Attaches a listener to a given EventType

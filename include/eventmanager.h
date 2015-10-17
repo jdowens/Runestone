@@ -29,6 +29,9 @@ namespace dtn
 		// update function
 		void update();
 
+		// events in queue
+		bool pendingEvents();
+
 		// listener attach/remove
 		int attachListener(dtn::Event::EventType type, std::function<void(
 			std::shared_ptr<dtn::Event>)> f);

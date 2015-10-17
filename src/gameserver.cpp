@@ -62,6 +62,11 @@ void dtn::GameServer::run()
 		m_mutex2.unlock();
 		m_mutex1.unlock();
 	}
+	// finish sending events before quiting
+	if (m_sendEventManager.pendingEvents())
+	{
+		m_sendEventManager.update();
+	}
 	m_thread1.terminate();
 	m_thread2.terminate();
 }
@@ -142,9 +147,18 @@ void dtn::GameServer::onRunestoneAttack(std::shared_ptr<dtn::Event> e)
 			m_battlefield.getEntityBattlefieldAt(cast->source);
 		std::shared_ptr<dtn::EntityBattlefield> rune2 =
 			m_battlefield.getEntityBattlefieldAt(cast->dest);
+
 		m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
 			new dtn::EventEntityBattle(rune1->getEntityID(), rune2->getEntityID(), rune1->toString(),
 			rune2->toString(), rune1->isDead(), rune2->isDead())));
+
+		// if rune2 was a playerbase and it died, the game is over
+		if (rune2->getType() == dtn::Entity::EntityType::PLAYERBASE &&
+			rune2->isDead())
+		{
+			m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventGameQuit()));
+		}
 	}
 }
 
