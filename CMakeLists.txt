@@ -40,6 +40,21 @@ if(SFML_FOUND)
   target_link_libraries(${EXECUTABLE_NAME_SERVER} ${SFML_LIBRARIES})
 endif()
 
+# Add SFGUI
+set(SFGUI_INCLUDE_DIR ${SFGUI_ROOT}/include)
+set(SFGUI_LIB_DIR ${SFGUI_ROOT}/build/lib)
+set(SFGUI_RELEASE_LIB optimized ${SFGUI_LIB_DIR}/Release/sfgui.lib)
+set(SFGUI_DEBUG_LIB debug ${SFGUI_LIB_DIR}/Debug/sfgui-d.lib)
+
+include_directories(${SFGUI_INCLUDE_DIR})
+target_link_libraries(${EXECUTABLE_NAME_CLIENT} ${SFGUI_DEBUG_LIB})
+target_link_libraries(${EXECUTABLE_NAME_SERVER} ${SFGUI_DEBUG_LIB})
+target_link_libraries(${EXECUTABLE_NAME_CLIENT} ${SFGUI_RELEASE_LIB})
+target_link_libraries(${EXECUTABLE_NAME_SERVER} ${SFGUI_RELEASE_LIB})
+
+file(COPY ${SFGUI_LIB_DIR}/Release/sfgui.dll DESTINATION ${CMAKE_BINARY_DIR}/dlls)
+file(COPY ${SFGUI_LIB_DIR}/Debug/sfgui-d.dll DESTINATION ${CMAKE_BINARY_DIR}/dlls)
+
 file(GLOB RESOURCES ${CMAKE_SOURCE_DIR}/Resources/*)
 file(COPY ${RESOURCES} DESTINATION ${CMAKE_BINARY_DIR}/Resources)
 file(GLOB DLLS ${SFML_ROOT}/bin/*)
