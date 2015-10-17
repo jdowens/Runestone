@@ -85,6 +85,15 @@ void dtn::GameScreen::render(sf::RenderWindow& window, int playerID)
 	for (std::map<int, std::shared_ptr<dtn::Renderable>>::iterator it = m_renderables.begin();
 		it != m_renderables.end(); ++it)
 	{
+		// color the sprites based on the owner
+		if (it->second->getOwner() == m_playerID)
+		{
+			it->second->getSprite().setColor(sf::Color::Blue);
+		}
+		else
+		{
+			it->second->getSprite().setColor(sf::Color::Red);
+		}
 		window.draw(it->second->getSprite());
 	}
 	m_tooltip.render(window);

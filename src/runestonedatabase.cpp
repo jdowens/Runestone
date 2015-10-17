@@ -122,7 +122,9 @@ std::string dtn::RunestoneDatabase::getInfo(int id)
 // calculateCost
 int dtn::RunestoneDatabase::calculateCost(int h, int d, int r, int s, int los)
 {
-	int cost = ((h * 5 + d * 5 + (r - 1) * 5 + (s - 5)*d + (los - 5)*h)/10);
+	// old formula
+	// int cost = ((h * 5 + d * 5 + (r - 1) * 5 + (s - 5)*d + (los - 5)*h)/10);
+	int cost = ((h * 3 + d * 3 + (r - 1) * 5 + (s - 5)*d + (los - 5)*h)/10);
 	return cost == 0 ? 0 : cost;
 }
 
