@@ -5,7 +5,7 @@ dtn::Player::Player(int id)
 	: m_deck(id), m_hand(id)
 {
 	m_playerID = id;
-	m_maxMana = 1;
+	m_maxMana = 0;
 	changeCurrentMana(m_maxMana);
 }
 

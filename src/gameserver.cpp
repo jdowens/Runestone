@@ -87,10 +87,13 @@ void dtn::GameServer::update()
 {
 	m_receiveEventManager.update();
 	m_battlefield.update();
-	// on turn 0, each player draws three runestones
+	// on turn 0, each player draws three runestones, and player 1 gets 
+	// a mana token
 	if (m_turnCount == 0)
 	{
 		draw(1); draw(1); draw(1); draw(2); draw(2); draw(2);
+		m_players[0].increaseMana();
+		m_players[0].resetCurrentMana();
 		initializeBases();
 		m_turnCount++;
 	}
