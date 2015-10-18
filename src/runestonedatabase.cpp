@@ -29,7 +29,7 @@ std::shared_ptr<dtn::RunestoneDatabase> dtn::RunestoneDatabase::getInstance()
 {
 	if (m_instance == NULL)
 	{
-		m_instance = std::shared_ptr<dtn::RunestoneDatabase>(new dtn::RunestoneDatabase("Resources/database.csv"));
+		m_instance = std::shared_ptr<dtn::RunestoneDatabase>(new dtn::RunestoneDatabase("Resources/condensed_database.csv"));
 	}
 	return m_instance;
 }
@@ -94,9 +94,13 @@ void dtn::RunestoneDatabase::generateWriteToFile(std::string namesFileName, std:
 		temp.m_name = word;
 		temp.m_maxHealth = std::rand() % 10 + 1;
 		temp.m_damage = std::rand() % 10 + 1;
+		temp.m_los = std::rand() % 8 + 3;
+		temp.m_speed = std::rand() % 8 + 3;
+		while (temp.m_speed > temp.m_los)
+			temp.m_speed = std::rand() % 10 + 1;
 		temp.m_range = std::rand() % 3 + 1;
-		temp.m_speed = std::rand() % 10 + 1;
-		temp.m_los = std::rand() % 10 + 1;
+		while (temp.m_range > temp.m_los)
+			temp.m_range = std::rand() % 3 + 1;
 		temp.m_cost = calculateCost(temp);
 		m_database[temp.m_id] = temp;
 	}

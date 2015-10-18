@@ -12,5 +12,6 @@ int main()
 
 	dtn::GameClient client(pnum, ip);
 	client.run();
+	dtn::RunestoneDatabase::getInstance()->generateWriteToFile("names.txt", "condensed_database.csv");
 	return 0;
 }
