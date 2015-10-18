@@ -6,7 +6,7 @@ dtn::PlayerView::PlayerView(int playerID) : View(playerID), m_window(
 	m_screen(playerID)
 {
 	m_window.setVisible(false);
-	m_screen.loadBackground("Resources/grid.png");
+	m_screen.loadBackground("Resources/tilemap.png");
 	m_screen.moveBackground(sf::Vector2f(static_cast<float>(dtn::Utilities::PIXELS_PER_TILE_X*
 		dtn::Utilities::BOARD_LEFT), static_cast<float>(
 		dtn::Utilities::PIXELS_PER_TILE_Y*dtn::Utilities::BOARD_TOP)));

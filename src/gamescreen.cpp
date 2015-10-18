@@ -1,13 +1,14 @@
 #include "gamescreen.h"
 
 dtn::GameScreen::GameScreen(std::shared_ptr<sf::Texture> background, int playerID)
-	: m_movementDecal(playerID)
+	: m_movementDecal(playerID), m_LOSDecal(playerID)
 {
 	m_backgroundTexture = background;
 	m_background.setTexture(*m_backgroundTexture);
 	m_tooltip.setInvisible();
 
 	m_movementDecal.setInvisible();
+	m_LOSDecal.setVisible();
 
 	initializeListeners();
 
@@ -15,11 +16,17 @@ dtn::GameScreen::GameScreen(std::shared_ptr<sf::Texture> background, int playerI
 }
 
 dtn::GameScreen::GameScreen(int playerID)
-	: m_movementDecal(playerID)
+	: m_movementDecal(playerID), m_LOSDecal(playerID)
 {
 	m_tooltip.setInvisible();
 
 	m_movementDecal.setInvisible();
+	m_LOSDecal.setVisible();
+	std::vector<sf::Vector2i> vecs;
+	vecs.push_back({ 11,12 });
+	vecs.push_back({ 10,12 });
+	vecs.push_back({ 12,12 });
+	m_LOSDecal.setLocations(vecs);
 
 	initializeListeners();
 
@@ -69,6 +76,7 @@ void dtn::GameScreen::render(sf::RenderWindow& window, int playerID)
 		window.draw(it->second->getSprite());
 	}
 		
+	m_LOSDecal.render(window);
 	m_movementDecal.render(window);
 	m_tooltip.render(window);
 }
@@ -362,4 +370,9 @@ void dtn::GameScreen::onReceivedEntityMoveDecal(std::shared_ptr<dtn::Event> e)
 		m_movementDecal.setLocations(cast->movementLocations);
 		m_movementDecal.setVisible();
 	}
+}
+
+void dtn::GameScreen::onReceivedBoardLOSDecal(std::shared_ptr<dtn::Event> e)
+{
+
 }

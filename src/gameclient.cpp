@@ -9,7 +9,7 @@ dtn::GameClient::GameClient(int playerID, std::string ip)
 		sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32), "Game Client", sf::Style::Default & ~sf::Style::Resize),
 	m_thread(&GameClient::receiveStrings, this), m_screen(playerID), m_HUD(playerID)
 {
-	m_screen.loadBackground("Resources/grid.png");
+	m_screen.loadBackground("Resources/tilemap.png");
 	m_screen.moveBackground(sf::Vector2f(dtn::Utilities::BOARD_LEFT*
 		dtn::Utilities::PIXELS_PER_TILE_X,
 		dtn::Utilities::BOARD_TOP*dtn::Utilities::PIXELS_PER_TILE_Y));

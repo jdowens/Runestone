@@ -12,8 +12,7 @@ void dtn::MovementDecal::render(sf::RenderWindow & window)
 	{
 		sf::RectangleShape shape;
 		shape.setSize(sf::Vector2f(dtn::Utilities::PIXELS_PER_TILE_X, dtn::Utilities::PIXELS_PER_TILE_Y));
-		shape.setFillColor(sf::Color::Green);
-		shape.setFillColor(sf::Color(0, 255, 0, 63));
+		shape.setFillColor(sf::Color(0, 255, 0, 127));
 
 		for (auto it = m_locations.begin(); it != m_locations.end(); ++it)
 		{

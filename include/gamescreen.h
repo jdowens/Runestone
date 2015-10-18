@@ -26,6 +26,7 @@
 #include "processshakerenderable.h"
 #include "tooltip.h"
 #include "movementdecal.h"
+#include "losdecal.h"
 
 namespace dtn
 {
@@ -60,6 +61,7 @@ namespace dtn
 		dtn::ProcessManager m_processManager;
 		dtn::Tooltip m_tooltip;
 		dtn::MovementDecal m_movementDecal;
+		dtn::LOSDecal m_LOSDecal;
 		sf::Sprite m_background;
 		int m_playerID;
 
@@ -72,6 +74,7 @@ namespace dtn
 		void onEntityAdded(std::shared_ptr<dtn::Event> e);
 		void onEntityMoveFlagChanged(std::shared_ptr<dtn::Event> e);
 		void onReceivedEntityMoveDecal(std::shared_ptr<dtn::Event> e);
+		void onReceivedBoardLOSDecal(std::shared_ptr<dtn::Event> e);
 
 		// old, not in use
 		void onAddRenderable(std::shared_ptr<dtn::Event> e);
