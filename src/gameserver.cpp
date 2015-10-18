@@ -12,6 +12,8 @@ dtn::GameServer::GameServer()
 	dtn::Player p1(1), p2(2);
 	p1.loadDeckFromFile("Resources/p1deck.txt");
 	p2.loadDeckFromFile("Resources/p2deck.txt");
+	p1.shuffleDeck();
+	p2.shuffleDeck();
 	m_players.push_back(p1);
 	m_players.push_back(p2);
 	// initialize current player

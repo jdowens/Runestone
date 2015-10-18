@@ -84,6 +84,11 @@ void dtn::Player::addToDeck(std::shared_ptr<dtn::Runestone> runestone)
 	m_deck.addRunestone(runestone);
 }
 
+void dtn::Player::shuffleDeck()
+{
+	m_deck.shuffle();
+}
+
 // draw
 /*
 	Draws a runestone and sets the runestones state to IN_HAND

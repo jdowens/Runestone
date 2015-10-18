@@ -37,6 +37,7 @@ namespace dtn
 		void addToDeck(std::shared_ptr<dtn::Runestone> runestone);
 		
 		// playing controls
+		void shuffleDeck();
 		bool draw();
 		std::shared_ptr<dtn::EntityBattlefield> playRunestone(std::shared_ptr<dtn::Runestone> runestone);
 		bool playRunestone(std::shared_ptr<dtn::Runestone> runestone, sf::Vector2i position,
