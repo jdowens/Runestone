@@ -35,7 +35,9 @@ std::shared_ptr<dtn::Runestone> dtn::PlayerDeck::draw()
 // shuffle
 void dtn::PlayerDeck::shuffle()
 {
-	std::random_shuffle(m_runestones.begin(), m_runestones.end());
+	// obtain a time-based seed:
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::shuffle(m_runestones.begin(), m_runestones.end(), std::default_random_engine(seed));
 }
 
 // size

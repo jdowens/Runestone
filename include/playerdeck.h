@@ -10,6 +10,8 @@
 #include<vector>
 #include<memory>
 #include<algorithm>
+#include<chrono>
+#include<random>
 
 // sfml includes
 #include<SFML/Graphics.hpp>
