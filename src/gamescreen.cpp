@@ -222,6 +222,8 @@ void dtn::GameScreen::initializeListeners()
 		std::bind(&GameScreen::onReceivedEntityMoveDecal, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL,
 		std::bind(&GameScreen::onReceivedBoardLOSDecal, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::DELETE_RENDERABLE,
+		std::bind(&GameScreen::onDeleteRenderable, this, std::placeholders::_1));
 }
 
 void dtn::GameScreen::onEntityDrawn(std::shared_ptr<dtn::Event> e)

@@ -47,6 +47,10 @@ namespace dtn
 		// update LOS function
 		void updateLOS(int playerID);
 
+		// update player hand
+		// the player id is the player who just played a card
+		void updatePlayerHand(int playerID);
+
 		sf::Thread m_thread1, m_thread2;					// dual player comm features
 		sf::Mutex m_mutex1, m_mutex2;
 		sf::TcpSocket m_p1Socket, m_p2Socket;

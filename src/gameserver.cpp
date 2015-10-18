@@ -160,21 +160,31 @@ void dtn::GameServer::onRunestonePlay(std::shared_ptr<dtn::Event> e)
 		std::shared_ptr<dtn::EntityBattlefield> rune =
 			m_battlefield.getEntityBattlefieldAt(cast->dest);
 		// an entity has moved
-		m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
-			new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
-
-		std::vector<std::shared_ptr<dtn::Runestone>> vec =
-			m_players[m_currentPlayer - 1].getHand();
-		int count = 1;
-		for (std::vector<std::shared_ptr<dtn::Runestone>>::iterator it = vec.begin();
-			it != vec.end(); ++it)
+		if (rune->getOwner() == 1)
 		{
-			m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
-				new dtn::EventEntityMoved((*it)->getEntityID(), 
-				m_players[m_currentPlayer - 1].getHandPosition(count++), 
-				(*it)->toString())));
+			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
+			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new EventDeleteRenderable(rune->getEntityID())));
+			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventEntityAdded(rune->getEntityID(), rune->getOwner(), rune->getLos(), 
+					rune->toString(), rune->getBounds(), rune->getRenderableID())));
 		}
-		// update the players LOS
+		else
+		{
+			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
+			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new EventDeleteRenderable(rune->getEntityID())));
+			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventEntityAdded(rune->getEntityID(), rune->getOwner(), rune->getLos(),
+					rune->toString(), rune->getBounds(), rune->getRenderableID())));
+		}
+
+		// update the player's hand
+		updatePlayerHand(rune->getOwner());
+
+		// update the player's LOS
 		updateLOS(rune->getOwner());
 	}
 }
@@ -257,10 +267,28 @@ void dtn::GameServer::draw(int playerID)
 	if (m_players[playerID - 1].draw())
 	{
 		std::shared_ptr<dtn::Runestone> rune = m_players[playerID - 1].getLastDrawn();
-		m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
-			rune->getEntityID(), rune->getOwner(), rune->getLos(),
-			rune->toString(), m_deckPositions[playerID-1], 
-			m_players[playerID - 1].getHandPosition(),rune->getRenderableID())));
+		if (rune->getOwner() == 1)
+		{
+			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
+				rune->getEntityID(), rune->getOwner(), rune->getLos(),
+				rune->toString(), m_deckPositions[playerID - 1],
+				m_players[playerID - 1].getHandPosition(), rune->getRenderableID())));
+			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
+				rune->getEntityID(), rune->getOwner(), rune->getLos(),
+				"Your opponent's card\n", m_deckPositions[playerID - 1],
+				m_players[playerID - 1].getHandPosition(), 1275)));
+		}
+		else
+		{
+			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
+				rune->getEntityID(), rune->getOwner(), rune->getLos(),
+				rune->toString(), m_deckPositions[playerID - 1],
+				m_players[playerID - 1].getHandPosition(), rune->getRenderableID())));
+			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
+				rune->getEntityID(), rune->getOwner(), rune->getLos(),
+				"Your opponent's card\n", m_deckPositions[playerID - 1],
+				m_players[playerID - 1].getHandPosition(), 1275)));
+		}
 	}
 }
 
@@ -304,6 +332,41 @@ void dtn::GameServer::updateLOS(int playerID)
 	{
 		m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 			new dtn::EventReceivedBoardLOSDecal(m_battlefield.getHiddenLocations(playerID))));
+	}
+}
+
+void dtn::GameServer::updatePlayerHand(int playerID)
+{
+	std::vector<std::shared_ptr<dtn::Runestone>> vec =
+		m_players[m_currentPlayer - 1].getHand();
+	int count = 1;
+	for (std::vector<std::shared_ptr<dtn::Runestone>>::iterator it = vec.begin();
+	it != vec.end(); ++it)
+	{
+		if (playerID == 1)
+		{
+			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventEntityMoved((*it)->getEntityID(),
+					m_players[m_currentPlayer - 1].getHandPosition(count),
+					(*it)->toString())));
+			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventEntityMoved((*it)->getEntityID(),
+					m_players[m_currentPlayer - 1].getHandPosition(count),
+					"Your opponent's card\n")));
+			count++;
+		}
+		else
+		{
+			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventEntityMoved((*it)->getEntityID(),
+					m_players[m_currentPlayer - 1].getHandPosition(count),
+					(*it)->toString())));
+			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+				new dtn::EventEntityMoved((*it)->getEntityID(),
+					m_players[m_currentPlayer - 1].getHandPosition(count),
+					"Your opponent's card\n")));
+			count++;
+		}
 	}
 }
 
