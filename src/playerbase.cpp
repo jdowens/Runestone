@@ -17,7 +17,7 @@ dtn::PlayerBase::PlayerBase(int owner, sf::Vector2i tilePos)
 	m_damage = 0;
 	m_range = 0;
 	m_speed = 0;
-	m_los = 0;
+	m_los = 1;
 	m_isDead = false;
 	m_hasMoved = false;
 	m_hasAttacked = false;
