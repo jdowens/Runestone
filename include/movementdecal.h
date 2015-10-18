@@ -6,21 +6,16 @@
 #include<SFML/Graphics.hpp>
 
 #include "utilities.h"
+#include "renderabledecal.h"
 
 namespace dtn
 {
-	class MovementDecal
+	class MovementDecal : public RenderableDecal
 	{
 	public :
 		MovementDecal(int playerID);
-		void setVisible();
-		void setInvisible();
-		void setLocations(std::vector<sf::Vector2i>& moveLocs);
-		void render(sf::RenderWindow& window);
+		virtual void render(sf::RenderWindow& window);
 	private :
-		std::vector<sf::Vector2i> m_movementLocations;
-		bool m_visible;
-		int m_playerID;
 	};
 }
 
