@@ -9,15 +9,20 @@ dtn::Tooltip::Tooltip()
 	m_text.setFont(m_font);
 	m_text.setString("");
 	m_text.setCharacterSize(FONT_SIZE);
-	m_text.setColor(sf::Color::Red);
+	m_text.setColor(sf::Color::Black);
+	m_rectBackgroundColor = sf::Color(sf::Color::Blue);
 }
 
 // update
 /*
 	Set the properties of the tooltip.
 */
-void dtn::Tooltip::update(sf::Vector2i pos, std::string s)
+void dtn::Tooltip::update(sf::Vector2i pos, std::string s, bool youAreOwner)
 {
+	if (youAreOwner)
+		m_rectBackgroundColor = sf::Color(0, 0, 255, 195);
+	else
+		m_rectBackgroundColor = sf::Color(255, 0, 0, 195);
 	setText(s);
 	setLocation(pos);
 }
@@ -66,7 +71,9 @@ void dtn::Tooltip::render(sf::RenderWindow& window)
 			static_cast<float>(m_rect.height)));
 		rect.setPosition(static_cast<float>(m_rect.left),
 			static_cast<float>(m_rect.top));
-		rect.setFillColor(sf::Color::White);
+		rect.setFillColor(m_rectBackgroundColor);
+		rect.setOutlineThickness(2.0f);
+		rect.setOutlineColor(sf::Color::Black);
 		window.draw(rect);
 		window.draw(m_text);
 	}

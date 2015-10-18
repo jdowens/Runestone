@@ -45,19 +45,28 @@ void dtn::InputHandler::updateHovered(dtn::GameScreen& screen)
 	// request movement decal if necessary
 	if (m_hovered != cache && m_hovered != NULL)
 	{
+		// don't get decal if already moved
 		if (!m_hovered->getHasMoved())
 		{
-			dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<Event>(
-				new EventRequestEntityMoveDecal(m_playerID,
-					dtn::Utilities::MouseToGlobalTile(dtn::Utilities::FloatVecToInt(
-						m_hovered->getSprite().getPosition()), m_playerID))));
+			// don't get decal of opponent's pieces
+			if (m_hovered->getOwner() == m_playerID)
+			{
+				dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<Event>(
+					new EventRequestEntityMoveDecal(m_playerID,
+						dtn::Utilities::MouseToGlobalTile(dtn::Utilities::FloatVecToInt(
+							m_hovered->getSprite().getPosition()), m_playerID))));
+			}
 		}
 	}
 
 	if (m_hovered != NULL)
 	{
-		screen.m_tooltip.update(m_mousePos, m_hovered->getToolTip());
-		screen.m_tooltip.setVisible();
+		screen.m_tooltip.update(m_mousePos, m_hovered->getToolTip(), m_hovered->getOwner() == m_playerID);
+		if (m_hovered->getOwner() == m_playerID ||
+			!screen.m_LOSDecal.contains(dtn::Utilities::MouseToGlobalTile(
+				dtn::Utilities::FloatVecToInt(m_hovered->getSprite().getPosition()), 
+				m_playerID)))
+			screen.m_tooltip.setVisible();
 	}
 	else
 	{
