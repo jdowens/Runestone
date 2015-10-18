@@ -6,6 +6,16 @@ dtn::LOSDecal::LOSDecal(int playerID)
 
 }
 
+bool dtn::LOSDecal::contains(sf::Vector2i tilePos)
+{
+	for (auto it = m_locations.begin(); it != m_locations.end(); ++it)
+	{
+		if ((*it) == tilePos)
+			return true;
+	}
+	return false;
+}
+
 void dtn::LOSDecal::render(sf::RenderWindow & window)
 {
 	if (m_visible)

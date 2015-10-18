@@ -68,7 +68,15 @@ void dtn::GameScreen::render(sf::RenderWindow& window, int playerID)
 				it->second->getSprite().setColor(sf::Color::Red);
 			}
 		}
-		window.draw(it->second->getSprite());
+		if (it->second->getOwner() == m_playerID)
+		{
+			window.draw(it->second->getSprite());
+		}
+		else if (!m_LOSDecal.contains(dtn::Utilities::MouseToGlobalTile(dtn::Utilities::FloatVecToInt(
+			it->second->getSprite().getPosition()), m_playerID)))
+		{
+			window.draw(it->second->getSprite());
+		}
 	}
 		
 	m_LOSDecal.render(window);

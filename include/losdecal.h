@@ -10,6 +10,7 @@ namespace dtn
 	{
 	public :
 		LOSDecal(int playerID);
+		bool contains(sf::Vector2i tilePos);
 		virtual void render(sf::RenderWindow& window);
 	private :
 
