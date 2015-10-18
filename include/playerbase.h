@@ -24,6 +24,7 @@ namespace dtn
 		// virtual overrides
 		virtual void print();
 		virtual std::string toString();
+		virtual std::string toCondensedTooltip();
 	private :
 		// global instance count
 		static int m_playerBaseCount;

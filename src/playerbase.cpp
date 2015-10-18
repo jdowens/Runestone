@@ -53,3 +53,11 @@ std::string dtn::PlayerBase::toString()
 
 	return ss.str();
 }
+
+	std::string dtn::PlayerBase::toCondensedTooltip()
+	{
+		std::stringstream ss;
+		ss << "Player " << m_owner << "'s Base\n";
+		ss << "Health: " << m_maxHealth << '/' << m_currentHealth << '\n';
+		return ss.str();
+	}

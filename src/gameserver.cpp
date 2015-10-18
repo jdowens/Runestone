@@ -147,7 +147,7 @@ void dtn::GameServer::onRunestoneMove(std::shared_ptr<dtn::Event> e)
 			m_battlefield.getEntityBattlefieldAt(cast->dest);
 		// an entity has moved
 		m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
-			new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
+			new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toCondensedTooltip())));
 		// also update the player's LOS
 		updateLOS(rune->getOwner());
 	}
@@ -165,22 +165,22 @@ void dtn::GameServer::onRunestonePlay(std::shared_ptr<dtn::Event> e)
 		if (rune->getOwner() == 1)
 		{
 			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
-				new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
+				new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toCondensedTooltip())));
 			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new EventDeleteRenderable(rune->getEntityID())));
 			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new dtn::EventEntityAdded(rune->getEntityID(), rune->getOwner(), rune->getLos(), 
-					rune->toString(), rune->getBounds(), rune->getRenderableID())));
+					rune->toCondensedTooltip(), rune->getBounds(), rune->getRenderableID())));
 		}
 		else
 		{
 			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
-				new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
+				new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toCondensedTooltip())));
 			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new EventDeleteRenderable(rune->getEntityID())));
 			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new dtn::EventEntityAdded(rune->getEntityID(), rune->getOwner(), rune->getLos(),
-					rune->toString(), rune->getBounds(), rune->getRenderableID())));
+					rune->toCondensedTooltip(), rune->getBounds(), rune->getRenderableID())));
 		}
 
 		// update the player's hand
@@ -203,8 +203,8 @@ void dtn::GameServer::onRunestoneAttack(std::shared_ptr<dtn::Event> e)
 			m_battlefield.getEntityBattlefieldAt(cast->dest);
 
 		m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
-			new dtn::EventEntityBattle(rune1->getEntityID(), rune2->getEntityID(), rune1->toString(),
-			rune2->toString(), rune1->isDead(), rune2->isDead())));
+			new dtn::EventEntityBattle(rune1->getEntityID(), rune2->getEntityID(), rune1->toCondensedTooltip(),
+			rune2->toCondensedTooltip(), rune1->isDead(), rune2->isDead())));
 
 		// if rune2 was a playerbase and it died, the game is over
 		if (rune2->getType() == dtn::Entity::EntityType::PLAYERBASE &&
@@ -273,7 +273,7 @@ void dtn::GameServer::draw(int playerID)
 		{
 			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
 				rune->getEntityID(), rune->getOwner(), rune->getLos(),
-				rune->toString(), m_deckPositions[playerID - 1],
+				rune->toCondensedTooltip(), m_deckPositions[playerID - 1],
 				m_players[playerID - 1].getHandPosition(), rune->getRenderableID())));
 			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
 				rune->getEntityID(), rune->getOwner(), rune->getLos(),
@@ -284,7 +284,7 @@ void dtn::GameServer::draw(int playerID)
 		{
 			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
 				rune->getEntityID(), rune->getOwner(), rune->getLos(),
-				rune->toString(), m_deckPositions[playerID - 1],
+				rune->toCondensedTooltip(), m_deckPositions[playerID - 1],
 				m_players[playerID - 1].getHandPosition(), rune->getRenderableID())));
 			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventEntityDrawn(
 				rune->getEntityID(), rune->getOwner(), rune->getLos(),
@@ -312,13 +312,13 @@ void dtn::GameServer::initializeBases()
 	m_battlefield.playEntityBattlefield(p1q1, p1q1->getTilePos());
 	std::shared_ptr<dtn::Event> e1(new dtn::EventEntityAdded(
 		p1q1->getEntityID(), p1q1->getOwner(), p1q1->getLos(),
-		p1q1->toString(), p1q1->getBounds(), p1q1->getRenderableID()));
+		p1q1->toCondensedTooltip(), p1q1->getBounds(), p1q1->getRenderableID()));
 	m_sendEventManager.pushEvent(e1);
 
 	m_battlefield.playEntityBattlefield(p2q1, p2q1->getTilePos());
 	std::shared_ptr<dtn::Event> e5(new dtn::EventEntityAdded(
 		p2q1->getEntityID(), p2q1->getOwner(), p2q1->getLos(),
-		p2q1->toString(), p2q1->getBounds(), p2q1->getRenderableID()));
+		p2q1->toCondensedTooltip(), p2q1->getBounds(), p2q1->getRenderableID()));
 	m_sendEventManager.pushEvent(e5);
 }
 
@@ -350,7 +350,7 @@ void dtn::GameServer::updatePlayerHand(int playerID)
 			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new dtn::EventEntityMoved((*it)->getEntityID(),
 					m_players[m_currentPlayer - 1].getHandPosition(count),
-					(*it)->toString())));
+					(*it)->toCondensedTooltip())));
 			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new dtn::EventEntityMoved((*it)->getEntityID(),
 					m_players[m_currentPlayer - 1].getHandPosition(count),
@@ -362,7 +362,7 @@ void dtn::GameServer::updatePlayerHand(int playerID)
 			m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new dtn::EventEntityMoved((*it)->getEntityID(),
 					m_players[m_currentPlayer - 1].getHandPosition(count),
-					(*it)->toString())));
+					(*it)->toCondensedTooltip())));
 			m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new dtn::EventEntityMoved((*it)->getEntityID(),
 					m_players[m_currentPlayer - 1].getHandPosition(count),

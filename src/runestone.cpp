@@ -28,6 +28,7 @@ dtn::Runestone::Runestone(dtn::RunestoneEntry entry)
 // constructor
 /*
 	This is the serial based constructor for building a runestone using data received over TCP comm.
+	Have to send the runetone::toString() value for reconstruction
 */
 dtn::Runestone::Runestone(std::string str)
 	: dtn::EntityBattlefield(m_runestoneCount++, dtn::Entity::EntityType::RUNESTONE)
@@ -85,6 +86,16 @@ std::string dtn::Runestone::toString()
 {
 	std::stringstream ss;
 	printToStream(ss);
+	return ss.str();
+}
+
+std::string dtn::Runestone::toCondensedTooltip()
+{
+	std::stringstream ss;
+	ss << "Name: " << m_name << "\tCost: " << m_cost << '\n';
+	ss << "Health: " << m_currentHealth << '/' << m_maxHealth << '\n';
+	ss << "Damage: " << m_damage << "\tRange: " << m_range << '\n';
+	ss << "Speed: " << m_speed << "\tLine of Sight: " << m_los << '\n';
 	return ss.str();
 }
 

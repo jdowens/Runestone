@@ -24,6 +24,7 @@ namespace dtn
 		// virtual overrides
 		virtual void print() = 0;
 		virtual std::string toString() = 0;
+		virtual std::string toCondensedTooltip() = 0;
 
 		// attack functions
 		void attack(std::shared_ptr<dtn::EntityBattlefield> target);

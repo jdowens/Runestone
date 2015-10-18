@@ -32,11 +32,13 @@ namespace dtn
 		
 		// constructors
 		Runestone(dtn::RunestoneEntry entry);
+		// reconstructs from runestone::toString
 		Runestone(std::string str);
 		
 		// virtual overrides
 		virtual void print();
 		virtual std::string toString();
+		virtual std::string toCondensedTooltip();
 
 		// get/set
 		dtn::Runestone::state getState();
