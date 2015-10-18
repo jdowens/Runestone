@@ -22,11 +22,6 @@ dtn::GameScreen::GameScreen(int playerID)
 
 	m_movementDecal.setInvisible();
 	m_LOSDecal.setVisible();
-	std::vector<sf::Vector2i> vecs;
-	vecs.push_back({ 11,12 });
-	vecs.push_back({ 10,12 });
-	vecs.push_back({ 12,12 });
-	m_LOSDecal.setLocations(vecs);
 
 	initializeListeners();
 
@@ -225,6 +220,8 @@ void dtn::GameScreen::initializeListeners()
 		std::bind(&GameScreen::onEntityMoveFlagChanged, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL,
 		std::bind(&GameScreen::onReceivedEntityMoveDecal, this, std::placeholders::_1));
+	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL,
+		std::bind(&GameScreen::onReceivedBoardLOSDecal, this, std::placeholders::_1));
 }
 
 void dtn::GameScreen::onEntityDrawn(std::shared_ptr<dtn::Event> e)
@@ -374,5 +371,9 @@ void dtn::GameScreen::onReceivedEntityMoveDecal(std::shared_ptr<dtn::Event> e)
 
 void dtn::GameScreen::onReceivedBoardLOSDecal(std::shared_ptr<dtn::Event> e)
 {
-
+	auto cast = dynamic_cast<dtn::EventReceivedBoardLOSDecal*>(e.get());
+	if (cast->locations.size() != 0)
+	{
+		m_LOSDecal.setLocations(cast->locations);
+	}
 }

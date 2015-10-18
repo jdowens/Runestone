@@ -261,6 +261,21 @@ sf::Vector2i dtn::Battlefield::getDimension()
 	return m_dimension;
 }
 
+std::vector<sf::Vector2i> dtn::Battlefield::getHiddenLocations(int playerID)
+{
+	std::vector<sf::Vector2i> ret;
+	for (int x = dtn::Utilities::BOARD_LEFT; x < dtn::Utilities::BOARD_WIDTH + dtn::Utilities::BOARD_LEFT; x++)
+	{
+		for (int y = dtn::Utilities::BOARD_TOP; y < dtn::Utilities::BOARD_HEIGHT + dtn::Utilities::BOARD_TOP; y++)
+		{
+			sf::Vector2i tmp(x, y);
+			if (!isVisible(tmp, playerID))
+				ret.push_back(tmp);
+		}
+	}
+	return ret;
+}
+
 // isVisible
 /*
 	Check if a given v2i position is visible by a given player corresponding to playerID.

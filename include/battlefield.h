@@ -44,6 +44,10 @@ namespace dtn
 		// pathfinding functions
 		std::vector<sf::Vector2i> getValidMoveLocations(sf::Vector2i entPosition);
 
+		// LOS functions
+		std::vector<sf::Vector2i> getHiddenLocations(int playerID);
+		bool isVisible(sf::Vector2i position, int playerID);
+
 		// entity polling and reset functions
 		std::shared_ptr<EntityBattlefield> getEntityBattlefieldAt(sf::Vector2i position);
 		void dtn::Battlefield::resetEntityBattlefieldFlags();
@@ -55,7 +59,6 @@ namespace dtn
 		sf::Vector2i getDimension();
 
 		// helper functions
-		bool isVisible(sf::Vector2i position, int playerID);
 
 		// debug rendering function (NOT USED)
 		void render(sf::RenderWindow& window, int playerID);

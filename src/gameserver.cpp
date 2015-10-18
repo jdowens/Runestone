@@ -105,14 +105,16 @@ void dtn::GameServer::update()
 {
 	m_receiveEventManager.update();
 	m_battlefield.update();
-	// on turn 0, each player draws three runestones, and player 1 gets 
-	// a mana token
+	// on turn 0, each player draws three runestones, player 1 gets 
+	// a mana token, and each player's LOS is updated
 	if (m_turnCount == 0)
 	{
 		draw(1); draw(1); draw(1); draw(2); draw(2); draw(2);
 		m_players[0].increaseMana();
 		m_players[0].resetCurrentMana();
 		initializeBases();
+		updateLOS(1);
+		updateLOS(2);
 		m_turnCount++;
 	}
 	// shift any internal events to the send queue
@@ -144,6 +146,8 @@ void dtn::GameServer::onRunestoneMove(std::shared_ptr<dtn::Event> e)
 		// an entity has moved
 		m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
 			new dtn::EventEntityMoved(rune->getEntityID(), cast->dest, rune->toString())));
+		// also update the player's LOS
+		updateLOS(rune->getOwner());
 	}
 }
 
@@ -170,6 +174,8 @@ void dtn::GameServer::onRunestonePlay(std::shared_ptr<dtn::Event> e)
 				m_players[m_currentPlayer - 1].getHandPosition(count++), 
 				(*it)->toString())));
 		}
+		// update the players LOS
+		updateLOS(rune->getOwner());
 	}
 }
 
@@ -194,6 +200,16 @@ void dtn::GameServer::onRunestoneAttack(std::shared_ptr<dtn::Event> e)
 		{
 			m_sendEventManager.pushEvent(std::shared_ptr<dtn::Event>(
 				new dtn::EventGameQuit()));
+		}
+
+		// update the player's LOS if their rune was lost
+		if (rune1->isDead())
+		{
+			updateLOS(rune1->getOwner());
+		}
+		if (rune2->isDead())
+		{
+			updateLOS(rune2->getOwner());
 		}
 	}
 }
@@ -274,6 +290,21 @@ void dtn::GameServer::initializeBases()
 		p2q1->getEntityID(), p2q1->getOwner(), p2q1->getLos(),
 		p2q1->toString(), p2q1->getBounds(), p2q1->getRenderableID()));
 	m_sendEventManager.pushEvent(e5);
+}
+
+void dtn::GameServer::updateLOS(int playerID)
+{
+	// update LOS for the respective owner of the rune that moved
+	if (playerID == 1)
+	{
+		m_exclusiveP1SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+			new dtn::EventReceivedBoardLOSDecal(m_battlefield.getHiddenLocations(playerID))));
+	}
+	else
+	{
+		m_exclusiveP2SendManager.pushEvent(std::shared_ptr<dtn::Event>(
+			new dtn::EventReceivedBoardLOSDecal(m_battlefield.getHiddenLocations(playerID))));
+	}
 }
 
 // p1Com
