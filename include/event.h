@@ -50,6 +50,7 @@ namespace dtn
 			ENTITY_MOVE_FLAG_CHANGED = 0x15,
 			REQUEST_ENTITY_MOVE_DECAL = 0x16,
 			RECEIVED_ENTITY_MOVE_DECAL = 0x17,
+			RECEIVED_BOARD_LOS_DECAL = 0x18,
 			ALL_EVENTS = 0xFE
 			// REMEBER UPDATE STEPS 1 2 3 4 (step 4 in eventmanager.cpp)
 		};
@@ -317,6 +318,17 @@ namespace dtn
 		EventReceivedEntityMoveDecal(std::vector<sf::Vector2i>& locs);
 		virtual std::string toString();
 		std::vector<sf::Vector2i> movementLocations;
+	};
+
+	// EventReceivedBoardLOSDecal
+	/*
+		Received the LOS decal from the server.
+	*/
+	struct EventReceivedBoardLOSDecal : public Event
+	{
+		EventReceivedBoardLOSDecal(std::vector<sf::Vector2i>& locs);
+		virtual std::string toString();
+		std::vector<sf::Vector2i> locations;
 	};
 
 }

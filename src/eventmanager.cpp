@@ -27,6 +27,7 @@ dtn::EventManager::EventManager()
 	m_idCounts[dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED] = 0;
 	m_idCounts[dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL] = 0;
 	m_idCounts[dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL] = 0;
+	m_idCounts[dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL] = 0;
 	m_idCounts[dtn::Event::EventType::ALL_EVENTS] = 0;
 }
 

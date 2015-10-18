@@ -41,6 +41,7 @@ std::string dtn::Event::eventTypeToString(dtn::Event::EventType type)
 	case dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED: ret = "ENTITY_MOVE_FLAG_CHANGED"; break;
 	case dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL: ret = "REQUEST_ENTITY_MOVE_DECAL"; break;
 	case dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL: ret = "RECEIVED_ENTITY_MOVE_DECAL"; break;
+	case dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL: ret = "RECEIVED_BOARD_LOS_DECAL"; break;
 	case dtn::Event::EventType::UNKNOWN: ret = "UNKNOWN"; break;
 	}
 	return ret;
@@ -267,6 +268,20 @@ std::shared_ptr<dtn::Event> dtn::Event::stringToEvent(std::string str)
 		ret = std::shared_ptr<dtn::Event>(new EventReceivedEntityMoveDecal(locs));
 	}
 		break;
+	case dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL:
+	{
+		std::vector<sf::Vector2i> locs;
+		int list_size;
+		ss >> word >> list_size;
+		for (int i = 0; i < list_size; i++)
+		{
+			sf::Vector2i tmp;
+			ss >> tmp.x >> tmp.y;
+			locs.push_back(tmp);
+		}
+		ret = std::shared_ptr<dtn::Event>(new EventReceivedBoardLOSDecal(locs));
+	}
+		break;
 	}
 	return ret;
 }
@@ -321,6 +336,8 @@ dtn::Event::EventType dtn::Event::stringToEventType(std::string str)
 		ret = dtn::Event::EventType::REQUEST_ENTITY_MOVE_DECAL;
 	else if (str == "RECEIVED_ENTITY_MOVE_DECAL")
 		ret = dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL;
+	else if (str == "RECEIVED_BOARD_LOS_DECAL")
+		ret = dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL;
 	else
 		ret = dtn::Event::EventType::UNKNOWN;
 	return ret;
@@ -729,6 +746,28 @@ std::string dtn::EventReceivedEntityMoveDecal::toString()
 	for (auto it = movementLocations.begin(); it != movementLocations.end(); ++it)
 	{
 		ss << '\n' <<  it->x << ' ' << it->y;
+	}
+	ss << '\n';
+	return ss.str();
+}
+
+dtn::EventReceivedBoardLOSDecal::EventReceivedBoardLOSDecal(std::vector<sf::Vector2i>& locs)
+	: Event(dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL)
+{
+	for (auto it = locs.begin(); it != locs.end(); ++it)
+	{
+		locations.push_back(*it);
+	}
+}
+
+std::string dtn::EventReceivedBoardLOSDecal::toString()
+{
+	std::stringstream ss;
+	ss << "EVENT_TYPE: " << eventTypeToString(m_type) << '\n';
+	ss << "LIST_SIZE: " << locations.size();
+	for (auto it = locations.begin(); it != locations.end(); ++it)
+	{
+		ss << '\n' << it->x << ' ' << it->y;
 	}
 	ss << '\n';
 	return ss.str();
