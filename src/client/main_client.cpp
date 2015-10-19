@@ -1,17 +1,29 @@
 #include "gameclient.h"
 #include<iostream>
 
+#include<SFML/Graphics.hpp>
+
 int main()
 {
+	sf::RenderWindow window(sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32)
+		, "Game Client", sf::Style::Default & ~sf::Style::Resize);
 	int pnum;
 	std::cout << "ENTER PLAYER NUMBER: ";
 	std::cin >> pnum;
 	std::string ip;
 	std::cout << "ENTER SERVER IP: ";
 	std::cin >> ip;
-
 	dtn::GameClient client(pnum, ip);
-	client.run();
+	client.onAttach();
+	sf::Clock clock;
+	while (true)
+	{
+		float dt = clock.restart().asSeconds();
+		client.update(dt, window);
+		window.clear();
+		client.render(window);
+		window.display();
+	}
 	dtn::RunestoneDatabase::getInstance()->generateWriteToFile("names.txt", "condensed_database.csv");
 	return 0;
 }

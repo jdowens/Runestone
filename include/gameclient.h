@@ -20,24 +20,26 @@
 #include "gamescreen.h"
 #include "inputhandlergame.h"
 #include "HUD.h"
+#include "scene.h"
 
 namespace dtn
 {
-	class GameClient
+	class GameClient : public Scene
 	{
 	public :
 		// constructor
 		GameClient(int playerID, std::string ip);
+		
+		// on attach
+		virtual void onAttach();
 
-		// run (main loop)
-		void run();
-		
 		// update (one loop iteration)
-		void update();
-	private :
+		virtual void update(float dt, sf::RenderWindow& window);
+
 		// render function
-		void render();											// called each loop to render to screen
-		
+		virtual void render(sf::RenderWindow& target);
+	private :
+
 		// TCP communication function (receive)
 		void receiveStrings();
 
@@ -45,11 +47,6 @@ namespace dtn
 		void sendString(std::shared_ptr<dtn::Event> e);
 		
 		// data
-		std::shared_ptr<GameScreen> m_screen;					// graphics portion
-		std::shared_ptr<HUD> m_HUD;								// heads up display
-		std::shared_ptr<InputHandlerGame> m_inputhandler;		// all input handled here
-		sf::RenderWindow m_window;								// game window
-		sf::Clock m_clock;										// client clock	
 		int m_playerID;											// player identification number
 		sf::TcpSocket m_socket;									// socket for TCP comm
 		sf::Mutex m_mutex;										// global mutex (for dual thread communication)

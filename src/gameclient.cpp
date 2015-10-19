@@ -5,28 +5,16 @@
 	Sets up a game client class to represent one player's view.
 */
 dtn::GameClient::GameClient(int playerID, std::string ip)
-	: m_window(sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32)
-		, "Game Client", sf::Style::Default & ~sf::Style::Resize),
-	m_thread(&GameClient::receiveStrings, this)
+	: m_thread(&GameClient::receiveStrings, this)
 {
 	m_screen = std::shared_ptr<GameScreen>(new GameScreen(playerID));
-	m_HUD = std::shared_ptr<HUD>(new HUD(playerID));
+	m_hud = std::shared_ptr<HUD>(new HUD(playerID));
 	m_inputhandler = std::shared_ptr<InputHandlerGame>(new InputHandlerGame(playerID));
 	m_screen->loadBackground("Resources/tilemap.png");
 	m_screen->moveBackground(sf::Vector2f(dtn::Utilities::BOARD_LEFT*
 		dtn::Utilities::PIXELS_PER_TILE_X,
 		dtn::Utilities::BOARD_TOP*dtn::Utilities::PIXELS_PER_TILE_Y));
 	m_playerID = playerID;
-
-	// attach listeners
-	/*dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_DRAWN,
-		std::bind(&GameClient::onEntityDrawn, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVED,
-		std::bind(&GameClient::onEntityMoved, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_BATTLE,
-		std::bind(&GameClient::onEntityBattle, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_ADDED,
-		std::bind(&GameClient::onEntityAdded, this, std::placeholders::_1));*/
 
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::END_TURN,
 		std::bind(&GameClient::sendString, this, std::placeholders::_1));
@@ -47,34 +35,18 @@ dtn::GameClient::GameClient(int playerID, std::string ip)
 	m_running = true;
 }
 
-// run
-/*
-	This is the main function called to run a single client session.
-*/
-void dtn::GameClient::run()
+void dtn::GameClient::onAttach()
 {
 	m_socket.connect(m_ip, 5555);
 	m_thread.launch();
-	while (m_running)
-	{
-		update();
-	}
-	if (dtn::GlobalEventQueue::getInstance()->pendingEvents())
-	{
-		dtn::GlobalEventQueue::getInstance()->update();
-	}
-	m_window.close();
-	m_thread.terminate();
 }
 
 // update
 /*
 	Called once per loop iteration.
 */
-void dtn::GameClient::update()
+void dtn::GameClient::update(float dt, sf::RenderWindow& window)
 {
-	// grab time since last update
-	float dt = m_clock.restart().asSeconds();
 	// execute pending events
 	m_mutex.lock();
 	dtn::GlobalEventQueue::getInstance()->update();
@@ -82,23 +54,19 @@ void dtn::GameClient::update()
 	// update game screen
 	m_screen->update(dt);
 	// handle events
-	m_inputhandler->update(m_window, m_screen, m_HUD);
+	m_inputhandler->update(window, m_screen, m_hud);
 	// update HUD
-	m_HUD->update(dt);
-	// draw
-	render();
+	m_hud->update(dt);
 }
 
 // render
 /*
 	Called once per loop iteration to draw to the game window.
 */
-void dtn::GameClient::render()
+void dtn::GameClient::render(sf::RenderWindow& target)
 {
-	m_window.clear();
-	m_screen->render(m_window);
-	m_HUD->render(m_window);
-	m_window.display();
+	m_screen->render(target);
+	m_hud->render(target);
 }
 
 // receiveStrings

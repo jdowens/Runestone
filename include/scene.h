@@ -17,16 +17,19 @@ namespace dtn
 		// constructor
 		Scene();
 
+		// when attached
+		virtual void onAttach() = 0;
+
 		// update (one loop iteration)
-		virtual void update(float dt) = 0;
+		virtual void update(float dt, sf::RenderWindow& window) = 0;
 
 		// draw the scene to the screen
 		virtual void render(sf::RenderWindow& target) = 0;		
-	private:
-
+	protected:
 		// data
-		GameScreen m_screen;									// graphics portion
-		InputHandler m_inputhandler;							// all input handled here
+		std::shared_ptr<Screen> m_screen;						// graphics portion
+		std::shared_ptr<InputHandler> m_inputhandler;			// all input handled here
+		std::shared_ptr<HUD> m_hud;
 	};
 }
 
