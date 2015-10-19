@@ -11,7 +11,7 @@ namespace dtn
 	public:
 		HUDgame(int player_ID);
 		virtual void update(float dt);
-		virtual void render(sf::RenderWindow& dest);
+		virtual void render(sf::RenderWindow& dest, sfg::SFGUI& sfgui);
 		virtual void handleEvent(sf::Event e);
 	private:
 		int m_playerMana;

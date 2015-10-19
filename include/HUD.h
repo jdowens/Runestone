@@ -19,7 +19,7 @@ namespace dtn
 	public :
 		HUD();
 		virtual void update(float dt) = 0;
-		virtual void render(sf::RenderWindow& dest) = 0;
+		virtual void render(sf::RenderWindow& dest, sfg::SFGUI& sfgui) = 0;
 		virtual void handleEvent(sf::Event e) = 0;
 	private :
 	};

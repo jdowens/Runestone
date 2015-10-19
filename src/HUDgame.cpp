@@ -44,9 +44,9 @@ void dtn::HUDgame::update(float dt)
 	m_window->Update(dt);
 }
 
-void dtn::HUDgame::render(sf::RenderWindow & dest)
+void dtn::HUDgame::render(sf::RenderWindow & dest, sfg::SFGUI& sfgui)
 {
-	dtn::Utilities::getSFGUI().Display(dest);
+	sfgui.Display(dest);
 }
 
 void dtn::HUDgame::handleEvent(sf::Event e)

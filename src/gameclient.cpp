@@ -8,7 +8,6 @@ dtn::GameClient::GameClient(int playerID, std::string ip)
 	: m_thread(&GameClient::receiveStrings, this)
 {
 	m_screen = std::shared_ptr<Screen>(new GameScreen(playerID));
-	m_hud = std::shared_ptr<HUD>(new HUDgame(playerID));
 	m_inputhandler = std::shared_ptr<InputHandler>(new InputHandlerGame(playerID));
 	m_screen->loadBackground("Resources/tilemap.png");
 	m_screen->moveBackground(sf::Vector2f(dtn::Utilities::BOARD_LEFT*
@@ -37,6 +36,7 @@ dtn::GameClient::GameClient(int playerID, std::string ip)
 
 void dtn::GameClient::onAttach()
 {
+	m_hud = std::shared_ptr<HUD>(new HUDgame(m_playerID));
 	m_socket.connect(m_ip, 5555);
 	m_thread.launch();
 }
@@ -63,10 +63,10 @@ void dtn::GameClient::update(float dt, sf::RenderWindow& window)
 /*
 	Called once per loop iteration to draw to the game window.
 */
-void dtn::GameClient::render(sf::RenderWindow& target)
+void dtn::GameClient::render(sf::RenderWindow& target, sfg::SFGUI& sfgui)
 {
 	m_screen->render(target);
-	m_hud->render(target);
+	m_hud->render(target, sfgui);
 }
 
 // receiveStrings

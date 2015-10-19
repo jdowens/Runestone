@@ -24,7 +24,7 @@ namespace dtn
 		virtual void update(float dt, sf::RenderWindow& window) = 0;
 
 		// draw the scene to the screen
-		virtual void render(sf::RenderWindow& target) = 0;		
+		virtual void render(sf::RenderWindow& target, sfg::SFGUI& sfgui) = 0;		
 	protected:
 		// data
 		std::shared_ptr<Screen> m_screen;						// graphics portion
