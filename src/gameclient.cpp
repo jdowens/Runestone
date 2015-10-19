@@ -5,12 +5,15 @@
 	Sets up a game client class to represent one player's view.
 */
 dtn::GameClient::GameClient(int playerID, std::string ip)
-	: m_inputhandler(playerID), m_window(
-		sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32), "Game Client", sf::Style::Default & ~sf::Style::Resize),
-	m_thread(&GameClient::receiveStrings, this), m_screen(playerID), m_HUD(playerID)
+	: m_window(sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32)
+		, "Game Client", sf::Style::Default & ~sf::Style::Resize),
+	m_thread(&GameClient::receiveStrings, this)
 {
-	m_screen.loadBackground("Resources/tilemap.png");
-	m_screen.moveBackground(sf::Vector2f(dtn::Utilities::BOARD_LEFT*
+	m_screen = std::shared_ptr<GameScreen>(new GameScreen(playerID));
+	m_HUD = std::shared_ptr<HUD>(new HUD(playerID));
+	m_inputhandler = std::shared_ptr<InputHandlerGame>(new InputHandlerGame(playerID));
+	m_screen->loadBackground("Resources/tilemap.png");
+	m_screen->moveBackground(sf::Vector2f(dtn::Utilities::BOARD_LEFT*
 		dtn::Utilities::PIXELS_PER_TILE_X,
 		dtn::Utilities::BOARD_TOP*dtn::Utilities::PIXELS_PER_TILE_Y));
 	m_playerID = playerID;
@@ -77,11 +80,11 @@ void dtn::GameClient::update()
 	dtn::GlobalEventQueue::getInstance()->update();
 	m_mutex.unlock();
 	// update game screen
-	m_screen.update(dt);
+	m_screen->update(dt);
 	// handle events
-	m_inputhandler.update(m_window, m_screen, m_HUD);
+	m_inputhandler->update(m_window, m_screen, m_HUD);
 	// update HUD
-	m_HUD.update(dt);
+	m_HUD->update(dt);
 	// draw
 	render();
 }
@@ -93,8 +96,8 @@ void dtn::GameClient::update()
 void dtn::GameClient::render()
 {
 	m_window.clear();
-	m_screen.render(m_window);
-	m_HUD.render(m_window);
+	m_screen->render(m_window);
+	m_HUD->render(m_window);
 	m_window.display();
 }
 

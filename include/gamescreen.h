@@ -33,7 +33,7 @@ namespace dtn
 {
 	class GameScreen : public Screen
 	{
-		friend class InputHandler;
+		friend class InputHandlerGame;
 	public :
 		// constructors
 		GameScreen(int playerID);

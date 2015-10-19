@@ -18,7 +18,7 @@
 #include"globaleventqueue.h"
 #include "event.h"
 #include "gamescreen.h"
-#include "inputhandler.h"
+#include "inputhandlergame.h"
 #include "HUD.h"
 
 namespace dtn
@@ -45,9 +45,9 @@ namespace dtn
 		void sendString(std::shared_ptr<dtn::Event> e);
 		
 		// data
-		GameScreen m_screen;									// graphics portion
-		HUD m_HUD;												// heads up display
-		InputHandler m_inputhandler;							// all input handled here
+		std::shared_ptr<GameScreen> m_screen;					// graphics portion
+		std::shared_ptr<HUD> m_HUD;								// heads up display
+		std::shared_ptr<InputHandlerGame> m_inputhandler;		// all input handled here
 		sf::RenderWindow m_window;								// game window
 		sf::Clock m_clock;										// client clock	
 		int m_playerID;											// player identification number
