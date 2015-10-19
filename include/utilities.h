@@ -16,11 +16,15 @@
 #include<SFML/System/Vector2.hpp>
 #include<SFML/Graphics/Rect.hpp>
 
+#include<SFGUI/SFGUI.hpp>
+
 namespace dtn
 {
 	class Utilities
 	{
 	public :
+		static sfg::SFGUI sfgui;
+		static sfg::SFGUI& getSFGUI();
 		static const int BOARD_WIDTH = 16;
 		static const int BOARD_HEIGHT = 16;
 		static const int BOARD_TOP = 1;

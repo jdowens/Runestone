@@ -20,6 +20,7 @@
 #include "gamescreen.h"
 #include "inputhandlergame.h"
 #include "HUD.h"
+#include "HUDgame.h"
 #include "scene.h"
 
 namespace dtn

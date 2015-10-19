@@ -7,9 +7,9 @@
 dtn::GameClient::GameClient(int playerID, std::string ip)
 	: m_thread(&GameClient::receiveStrings, this)
 {
-	m_screen = std::shared_ptr<GameScreen>(new GameScreen(playerID));
-	m_hud = std::shared_ptr<HUD>(new HUD(playerID));
-	m_inputhandler = std::shared_ptr<InputHandlerGame>(new InputHandlerGame(playerID));
+	m_screen = std::shared_ptr<Screen>(new GameScreen(playerID));
+	m_hud = std::shared_ptr<HUD>(new HUDgame(playerID));
+	m_inputhandler = std::shared_ptr<InputHandler>(new InputHandlerGame(playerID));
 	m_screen->loadBackground("Resources/tilemap.png");
 	m_screen->moveBackground(sf::Vector2f(dtn::Utilities::BOARD_LEFT*
 		dtn::Utilities::PIXELS_PER_TILE_X,
