@@ -1,20 +1,5 @@
 #include "gamescreen.h"
 
-dtn::GameScreen::GameScreen(std::shared_ptr<sf::Texture> background, int playerID)
-	: m_movementDecal(playerID), m_LOSDecal(playerID)
-{
-	m_backgroundTexture = background;
-	m_background.setTexture(*m_backgroundTexture);
-	m_tooltip.setInvisible();
-
-	m_movementDecal.setInvisible();
-	m_LOSDecal.setVisible();
-
-	initializeListeners();
-
-	m_playerID = playerID;
-}
-
 dtn::GameScreen::GameScreen(int playerID)
 	: m_movementDecal(playerID), m_LOSDecal(playerID)
 {
@@ -28,27 +13,14 @@ dtn::GameScreen::GameScreen(int playerID)
 	m_playerID = playerID;
 }
 
-void dtn::GameScreen::loadBackground(std::string fileName)
-{
-	m_backgroundTexture = std::shared_ptr<sf::Texture>(new sf::Texture);
-	m_backgroundTexture->loadFromFile(fileName);
-	m_background.setTexture(*m_backgroundTexture);
-}
-
-void dtn::GameScreen::moveBackground(sf::Vector2f newLoc)
-{
-	m_background.setPosition(newLoc); 
-}
-
 void dtn::GameScreen::update(float dt)
 {
-	std::vector<std::shared_ptr<dtn::Event>> ret;
-	m_processManager.update(dt);
+	Screen::update(dt);
 }
 
-void dtn::GameScreen::render(sf::RenderWindow& window, int playerID)
+void dtn::GameScreen::render(sf::RenderWindow& window)
 {
-	window.draw(m_background);
+	Screen::render(window);
 	for (std::map<int, std::shared_ptr<dtn::Renderable>>::iterator it = m_renderables.begin();
 		it != m_renderables.end(); ++it)
 	{

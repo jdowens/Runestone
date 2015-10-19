@@ -27,26 +27,22 @@
 #include "tooltip.h"
 #include "movementdecal.h"
 #include "losdecal.h"
+#include "screen.h"
 
 namespace dtn
 {
-	class GameScreen
+	class GameScreen : public Screen
 	{
 		friend class InputHandler;
 	public :
 		// constructors
-		GameScreen(std::shared_ptr<sf::Texture> background, int playerID);
 		GameScreen(int playerID);
 
-		// handle background texture
-		void loadBackground(std::string fileName);
-		void moveBackground(sf::Vector2f newLoc);
-
 		// update function (called once per global loop)
-		void update(float dt);
+		virtual void update(float dt);
 
 		// render to window
-		void render(sf::RenderWindow& window, int playerID);
+		virtual void render(sf::RenderWindow& window);
 		
 		// handle the addition/removal of renderables
 		void pushRenderable(int entityID, std::shared_ptr<dtn::Renderable> renderable);
@@ -57,12 +53,9 @@ namespace dtn
 		std::shared_ptr<dtn::Renderable> getRenderableAt(sf::Vector2f position);
 	private :
 		std::map<int, std::shared_ptr<dtn::Renderable>> m_renderables;
-		std::shared_ptr<sf::Texture> m_backgroundTexture;
-		dtn::ProcessManager m_processManager;
 		dtn::Tooltip m_tooltip;
 		dtn::MovementDecal m_movementDecal;
 		dtn::LOSDecal m_LOSDecal;
-		sf::Sprite m_background;
 		int m_playerID;
 
 		// event listeners
@@ -75,11 +68,11 @@ namespace dtn
 		void onEntityMoveFlagChanged(std::shared_ptr<dtn::Event> e);
 		void onReceivedEntityMoveDecal(std::shared_ptr<dtn::Event> e);
 		void onReceivedBoardLOSDecal(std::shared_ptr<dtn::Event> e);
+		void onDeleteRenderable(std::shared_ptr<dtn::Event> e);
 
 		// old, not in use
 		void onAddRenderable(std::shared_ptr<dtn::Event> e);
 		void onMoveRenderable(std::shared_ptr<dtn::Event> e);
-		void onDeleteRenderable(std::shared_ptr<dtn::Event> e);
 		void onUpdateRenderableLos(std::shared_ptr<dtn::Event> e);
 		void onUpdateRenderableTooltip(std::shared_ptr<dtn::Event> e);
 		void onUpdateRenderableOwner(std::shared_ptr<dtn::Event> e);

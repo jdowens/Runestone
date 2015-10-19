@@ -202,7 +202,7 @@ void dtn::PlayerView::handleEvent(sf::Event event)
 void dtn::PlayerView::render()
 {
 	m_window.clear();
-	m_screen.render(m_window, m_playerID);
+	m_screen.render(m_window);
 	m_player.render(m_window);
 	renderOtherPlayerCards();
 	m_battlefield.render(m_window, m_playerID);
