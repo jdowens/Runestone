@@ -25,19 +25,20 @@ dtn::HUDMainMenu::HUDMainMenu()
 	m_quitButton->GetSignal(sfg::Button::OnLeftClick).Connect(
 		std::bind(&HUDMainMenu::onQuitButtonClicked, this));
 
-	m_desktop.Add(m_window);
+	//m_desktop.Add(m_window);
 
 	m_stupidRectThatHasToBeDrawn.setFillColor(sf::Color::Black);
 }
 
 dtn::HUDMainMenu::~HUDMainMenu()
 {
-	m_desktop.RemoveAll();
+	//m_desktop.RemoveAll();
+
 }
 
 void dtn::HUDMainMenu::update(float dt)
 {
-	m_desktop.Update(dt);
+	m_window->Update(dt);
 }
 
 void dtn::HUDMainMenu::render(sf::RenderWindow & dest)
@@ -48,15 +49,16 @@ void dtn::HUDMainMenu::render(sf::RenderWindow & dest)
 
 void dtn::HUDMainMenu::handleEvent(sf::Event e)
 {
-	m_desktop.HandleEvent(e);
+	m_window->HandleEvent(e);
 }
 
 void dtn::HUDMainMenu::onPlayOnlineButtonClicked()
 {
 	dtn::SceneManager::getInstance()->runScene(
-		std::shared_ptr<GameClient>(new GameClient(std::atoi(
-			m_playerNumberEntry->GetText().toAnsiString().c_str()), 
-			m_ipEntry->GetText().toAnsiString())));
+		std::shared_ptr<GameClient>(new GameClient(1, "localhost")));
+	/*std::atoi(
+		m_playerNumberEntry->GetText().toAnsiString().c_str()),
+		m_ipEntry->GetText().toAnsiString()))*/
 }
 
 void dtn::HUDMainMenu::onQuitButtonClicked()

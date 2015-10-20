@@ -18,7 +18,7 @@ namespace dtn
 		virtual void render(sf::RenderWindow& dest);
 		virtual void handleEvent(sf::Event e);
 	private :
-		sfg::Desktop m_desktop;
+		//sfg::Desktop m_desktop;
 		std::shared_ptr<sfg::Window> m_window;
 		std::shared_ptr<sfg::Box> m_guiLayout;
 		std::shared_ptr<sfg::Entry> m_ipEntry;
