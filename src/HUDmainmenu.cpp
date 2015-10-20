@@ -4,24 +4,13 @@ dtn::HUDMainMenu::HUDMainMenu(sf::RenderWindow& dest)
 	: HUD(dest)
 {
 	m_layout = std::make_shared<tgui::VerticalLayout>();
-	m_ipLayout = std::make_shared<tgui::HorizontalLayout>();
-	m_pNumLayout = std::make_shared<tgui::HorizontalLayout>();
 
 	m_layout->setSize(0.25*tgui::bindWidth(*m_GUI), tgui::bindHeight(*m_GUI));
 
 	m_ipAddressEntry = std::make_shared<tgui::EditBox>(tgui::EditBox());
+	m_ipAddressEntry->setDefaultText("IP Address");
 	m_playerNumberEntry = std::make_shared<tgui::EditBox>(tgui::EditBox());
-	m_ipLabel = std::make_shared<tgui::Label>();
-	m_ipLabel->setText("IP: ");
-	m_numLabel = std::make_shared<tgui::Label>();
-	m_numLabel->setText("#: ");
-
-	m_ipLayout->setSize(tgui::bindWidth(m_layout), tgui::bindHeight(m_ipAddressEntry));
-	m_pNumLayout->setSize(tgui::bindWidth(m_layout), tgui::bindHeight(m_playerNumberEntry));
-	m_ipLayout->add(m_ipLabel);
-	m_ipLayout->add(m_ipAddressEntry);
-	m_pNumLayout->add(m_numLabel);
-	m_pNumLayout->add(m_playerNumberEntry);
+	m_playerNumberEntry->setDefaultText("Player Number");
 
 	m_playOnlineButton = std::make_shared<tgui::Button>(tgui::Button());
 	m_quitButton = std::make_shared<tgui::Button>(tgui::Button());
@@ -34,8 +23,8 @@ dtn::HUDMainMenu::HUDMainMenu(sf::RenderWindow& dest)
 	m_quitButton->setText("Quit");
 
 	m_GUI->add(m_layout);
-	m_layout->add(m_ipLayout);
-	m_layout->add(m_pNumLayout);
+	m_layout->add(m_ipAddressEntry);
+	m_layout->add(m_playerNumberEntry);
 	m_layout->add(m_playOnlineButton);
 	m_layout->add(m_quitButton);
 	m_layout->insertSpace(2, 20.0F);

@@ -20,10 +20,6 @@ namespace dtn
 		virtual void handleEvent(sf::Event e);
 	private :
 		tgui::VerticalLayout::Ptr m_layout;
-		tgui::HorizontalLayout::Ptr m_ipLayout;
-		tgui::HorizontalLayout::Ptr m_pNumLayout;
-		tgui::Label::Ptr m_ipLabel;
-		tgui::Label::Ptr m_numLabel;
 		tgui::EditBox::Ptr m_ipAddressEntry;
 		tgui::EditBox::Ptr m_playerNumberEntry;
 		tgui::Button::Ptr m_playOnlineButton;

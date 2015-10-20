@@ -33,6 +33,8 @@ dtn::HUDgame::HUDgame(int player_ID, sf::RenderWindow& dest)
 	m_layout->add(m_opponentManaText);
 	m_layout->add(m_endTurnButton);
 	m_layout->add(m_playerManaText);
+	m_layout->insertSpace(1, 5.0);
+	m_layout->insertSpace(3, 5.0);
 
 	// initialize mana text
 	setPlayerManaText(0);
