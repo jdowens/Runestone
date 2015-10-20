@@ -112,7 +112,7 @@ void dtn::Runestone::setState(dtn::Runestone::state state)
 }
 
 // getCost
-int dtn::Runestone::getCost()
+int dtn::Runestone::getCost() const
 {
 	return m_cost;
 }
@@ -177,4 +177,9 @@ dtn::Runestone::state dtn::Runestone::stringToState(std::string str)
 	else if (str == "IN_DECK")
 		ret = dtn::Runestone::state::IN_DECK;
 	return ret;
+}
+
+bool dtn::SortRunestoneByCost(const std::shared_ptr<dtn::Runestone>& r1, const std::shared_ptr<dtn::Runestone>& r2)
+{
+	return r1->getCost() < r2->getCost();
 }

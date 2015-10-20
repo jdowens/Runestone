@@ -25,6 +25,7 @@ namespace dtn
 {
 	class GameServer
 	{
+		friend class GameClientAI;
 	public :
 		// constructor
 		GameServer();

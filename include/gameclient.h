@@ -35,8 +35,8 @@ namespace dtn
 		void connectToServer();
 
 		// update (one loop iteration)
-		 void update(float dt);
-	private :
+		virtual void update(float dt);
+	protected :
 
 		// TCP communication function (receive)
 		void receiveStrings();

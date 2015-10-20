@@ -70,11 +70,7 @@ void dtn::GameServer::run()
 	// run main loop
 	while (m_running)
 	{
-		m_mutex1.lock();
-		m_mutex2.lock();
 		update();
-		m_mutex2.unlock();
-		m_mutex1.unlock();
 	}
 	// finish sending events before quiting
 	if (m_sendEventManager.pendingEvents())
@@ -99,6 +95,8 @@ void dtn::GameServer::run()
 */
 void dtn::GameServer::update()
 {
+	m_mutex1.lock();
+	m_mutex2.lock();
 	m_receiveEventManager.update();
 	m_battlefield.update();
 	// on turn 0, each player draws three runestones, player 1 gets 
@@ -119,6 +117,9 @@ void dtn::GameServer::update()
 	m_sendEventManager.update();
 	m_exclusiveP1SendManager.update();
 	m_exclusiveP2SendManager.update();
+
+	m_mutex2.unlock();
+	m_mutex1.unlock();
 }
 
 void dtn::GameServer::initialize()

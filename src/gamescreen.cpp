@@ -45,14 +45,14 @@ void dtn::GameScreen::render(sf::RenderWindow& window)
 		{
 			window.draw(it->second->getSprite());
 		}
-		else if (!m_LOSDecal.contains(dtn::Utilities::MouseToGlobalTile(dtn::Utilities::FloatVecToInt(
-			it->second->getSprite().getPosition()), m_playerID)))
-		{
+		//else if (!m_LOSDecal.contains(dtn::Utilities::MouseToGlobalTile(dtn::Utilities::FloatVecToInt(
+		//	it->second->getSprite().getPosition()), m_playerID)))
+		//{
 			window.draw(it->second->getSprite());
-		}
+		//}
 	}
 		
-	m_LOSDecal.render(window);
+	//m_LOSDecal.render(window);
 	m_movementDecal.render(window);
 	m_tooltip.render(window);
 }

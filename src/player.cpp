@@ -194,6 +194,11 @@ bool dtn::Player::attackRunestone(sf::Vector2i source, sf::Vector2i dest, dtn::B
 	return false;
 }
 
+int dtn::Player::getCurrentMana()
+{
+	return m_currentMana;
+}
+
 // increaseMana
 /*
 	Max limit currently set to 10.

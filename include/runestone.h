@@ -43,7 +43,7 @@ namespace dtn
 		// get/set
 		dtn::Runestone::state getState();
 		void setState(dtn::Runestone::state state);
-		int getCost();
+		int getCost() const;
 		int getID();
 	private:
 		int m_id;
@@ -54,6 +54,9 @@ namespace dtn
 		static std::string stateToString(dtn::Runestone::state state);
 		static state stringToState(std::string);
 	};
+
+	bool SortRunestoneByCost(const std::shared_ptr<dtn::Runestone>& r1, 
+		const std::shared_ptr<dtn::Runestone>& r2);
 }
 
 #endif
