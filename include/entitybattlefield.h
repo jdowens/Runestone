@@ -45,6 +45,7 @@ namespace dtn
 		void setHasAttacked(bool f);
 		void setHasMoved(bool f);
 		bool canMove();
+		bool canAttack();
 		bool isDead();
 	protected :
 		std::string m_name;	

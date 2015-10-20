@@ -337,7 +337,7 @@ void dtn::Battlefield::render(sf::RenderWindow& window, int playerID)
 	rect.setSize(sf::Vector2f(dtn::Utilities::PIXELS_PER_TILE_X, dtn::Utilities::PIXELS_PER_TILE_Y));
 	rect.setFillColor(sf::Color(0, 0, 0, 128));
 	for (int i = dtn::Utilities::BOARD_LEFT;
-		i < dtn::Utilities::BOARD_WIDTH + dtn::Utilities::BOARD_LEFT; i++)
+	i < dtn::Utilities::BOARD_WIDTH + dtn::Utilities::BOARD_LEFT; i++)
 	{
 		for (int j = dtn::Utilities::BOARD_TOP; j < dtn::Utilities::BOARD_HEIGHT +
 			dtn::Utilities::BOARD_TOP; j++)
@@ -352,6 +352,203 @@ void dtn::Battlefield::render(sf::RenderWindow& window, int playerID)
 
 		}
 	}
+}
+
+std::shared_ptr<dtn::EntityBattlefield> dtn::Battlefield::getFirstMoveableEntity(int playerID)
+{
+	for (auto it = m_placedEntityBattlefields.begin(); it != m_placedEntityBattlefields.end(); ++it)
+	{
+		// if owned
+		if ((*it)->getOwner() == playerID)
+		{
+			// if hasn't moved and has speed greater than 0
+			if ((*it)->canMove() && (*it)->getSpeed() > 0)
+			{
+				return *it;
+			}
+		}
+	}
+	return NULL;
+}
+
+std::shared_ptr<dtn::EntityBattlefield> dtn::Battlefield::getFirstAttackReadyEntity(int playerID)
+{
+	for (auto it = m_placedEntityBattlefields.begin(); it != m_placedEntityBattlefields.end(); ++it)
+	{
+		// if owned
+		if ((*it)->getOwner() == playerID)
+		{
+			// if hasn't moved and has speed greater than 0
+			if ((*it)->canAttack() && (*it)->getSpeed() > 0)
+			{
+				return *it;
+			}
+		}
+	}
+	return NULL;
+}
+
+std::vector<std::shared_ptr<dtn::EntityBattlefield>> dtn::Battlefield::getAllMovableEntities(int playerID)
+{
+	std::vector<std::shared_ptr<EntityBattlefield>> ret;
+	for (auto it = m_placedEntityBattlefields.begin(); it != m_placedEntityBattlefields.end(); ++it)
+	{
+		// if owned
+		if ((*it)->getOwner() == playerID)
+		{
+			// if hasn't moved and has speed greater than 0
+			if ((*it)->canMove() && (*it)->getSpeed() > 0)
+			{
+				ret.push_back(*it);
+			}
+		}
+	}
+	return ret;
+}
+
+std::vector<std::shared_ptr<dtn::EntityBattlefield>> dtn::Battlefield::getAllOwnedRunes(int playerID)
+{
+	std::vector<std::shared_ptr<EntityBattlefield>> ret;
+	for (auto it = m_placedEntityBattlefields.begin(); it != m_placedEntityBattlefields.end(); ++it)
+	{
+		// if owned
+		if ((*it)->getOwner() == playerID)
+		{
+			// if hasn't moved and has speed greater than 0
+			if ((*it)->getType() == dtn::Entity::EntityType::RUNESTONE)
+			{
+				ret.push_back(*it);
+			}
+		}
+	}
+	return ret;
+}
+
+sf::Vector2i dtn::Battlefield::pathToEnemyBase(std::shared_ptr<EntityBattlefield> ent)
+{
+	sf::Vector2i ret(-1, -1);
+	auto enemyBase = findPlayerBase((ent->getOwner() == 1) ? 2 : 1);
+	if (enemyBase != NULL)
+	{
+		auto borderingSpaces = getBorderingSpaces(enemyBase->getBounds());
+		auto dest = closestUnoccupiedSpace(borderingSpaces, ent->getTilePos());
+		ret = pathToSpace(ent, dest);
+	}
+	return ret;
+}
+
+sf::Vector2i dtn::Battlefield::pathToSpace(std::shared_ptr<EntityBattlefield> ent, sf::Vector2i dest)
+{
+	auto moveLocs = getValidMoveLocations(ent->getTilePos());
+	auto ret = closestUnoccupiedSpace(moveLocs, dest);
+	return ret;
+}
+
+std::vector<sf::Vector2i> dtn::Battlefield::getBorderingSpaces(sf::IntRect bounds)
+{
+	std::vector<sf::Vector2i> ret;
+
+	int spaceCount = (bounds.width + bounds.height) * 2;
+	for (int i = 0; i < bounds.width; i++)
+	{
+		ret.push_back(sf::Vector2i(bounds.left + i, bounds.top - 1));
+		ret.push_back(sf::Vector2i(bounds.left + i, bounds.top + bounds.height));
+	}
+	for (int i = 0; i < bounds.height; i++)
+	{
+		ret.push_back(sf::Vector2i(bounds.left - 1, bounds.top + i));
+		ret.push_back(sf::Vector2i(bounds.left + bounds.width, bounds.top + i));
+	}
+
+	return ret;
+}
+
+std::shared_ptr<dtn::EntityBattlefield> dtn::Battlefield::findPlayerBase(int playerID)
+{
+	for (auto it = m_placedEntityBattlefields.begin(); it != m_placedEntityBattlefields.end(); ++it)
+	{
+		if ((*it)->getType() == dtn::Entity::EntityType::PLAYERBASE &&
+			(*it)->getOwner() == playerID)
+			{
+				return *it;
+			}
+	}
+	return NULL;
+}
+
+sf::Vector2i dtn::Battlefield::closestSpace(std::vector<sf::Vector2i> list, sf::Vector2i dest)
+{
+	sf::Vector2i ret;
+	int minDist = 10000;
+	for (auto it = list.begin(); it != list.end(); ++it)
+	{
+		auto dist = dtn::Utilities::TileDistance(*it, dest);
+		if (dist < minDist)
+		{
+			minDist = dist;
+			ret = *it;
+			// short circuit if reach space
+			if (dist == 0)
+				return ret;
+		}
+	}
+	return ret;
+}
+
+sf::Vector2i dtn::Battlefield::closestUnoccupiedSpace(std::vector<sf::Vector2i> list, sf::Vector2i dest)
+{
+	sf::Vector2i ret;
+	int minDist = 10000;
+	for (auto it = list.begin(); it != list.end(); ++it)
+	{
+		if (getEntityBattlefieldAt(*it) != NULL)	// if something there, keep going
+			continue;
+		auto dist = dtn::Utilities::TileDistance(*it, dest);
+		if (dist < minDist)
+		{
+			minDist = dist;
+			ret = *it;
+			// short circuit if reach space
+			if (dist == 0)
+				return ret;
+		}
+	}
+	return ret;
+}
+
+std::shared_ptr<dtn::EntityBattlefield> dtn::Battlefield::closestEnemy(
+	std::vector<std::shared_ptr<dtn::EntityBattlefield>> list, 
+	std::shared_ptr<dtn::EntityBattlefield> ent)
+{
+	std::shared_ptr<dtn::EntityBattlefield> ret = NULL;
+	int minDist = 10000;
+	for (auto it = list.begin(); it != list.end(); ++it)
+	{
+		if ((*it)->getOwner() != ent->getOwner())
+		{
+			auto dist = dtn::Utilities::TileDistance((*it)->getTilePos(), ent->getTilePos());
+			if (dist < minDist)
+			{
+				minDist = dist;
+				ret = *it;
+				// short circuit if reach space
+				if (dist == 0)
+					return ret;
+			}
+		}
+	}
+	return ret;
+}
+
+std::shared_ptr<dtn::EntityBattlefield> dtn::Battlefield::closestEnemyInRange(std::shared_ptr<EntityBattlefield> ent)
+{
+	auto closest = closestEnemy(m_placedEntityBattlefields, ent);
+	if (dtn::Utilities::TileDistance(ent->getTilePos(), closest->getTilePos()) <= ent->getRange())
+	{
+		return closest;
+	}
+	else
+		return NULL;
 }
 
 void dtn::Battlefield::determineValidMoveLocations(sf::Vector2i curPos, int distTraveled, int range, std::vector<sf::Vector2i>& list)

@@ -12,6 +12,7 @@ dtn::EntityBattlefield::EntityBattlefield(int count, dtn::Entity::EntityType typ
 	: Entity(count, type)
 {
 	m_hasMoved = false;
+	m_hasAttacked = false;
 	m_battlefieldEntityCount++;
 }
 
@@ -22,6 +23,7 @@ dtn::EntityBattlefield::EntityBattlefield(int count, dtn::Entity::EntityType typ
 dtn::EntityBattlefield::EntityBattlefield()
 {
 	m_hasMoved = false;
+	m_hasAttacked = false;
 	m_battlefieldEntityCount++;
 }
 
@@ -159,6 +161,11 @@ void dtn::EntityBattlefield::setHasMoved(bool f)
 bool dtn::EntityBattlefield::canMove()
 {
 	return !m_hasMoved;
+}
+
+bool dtn::EntityBattlefield::canAttack()
+{
+	return !m_hasAttacked;
 }
 
 // isDead
