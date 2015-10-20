@@ -58,6 +58,6 @@ std::string dtn::PlayerBase::toString()
 	{
 		std::stringstream ss;
 		ss << "Player " << m_owner << "'s Base\n";
-		ss << "Health: " << m_maxHealth << '/' << m_currentHealth << '\n';
+		ss << "Health: " << m_currentHealth << '/' << m_maxHealth << '\n';
 		return ss.str();
 	}
