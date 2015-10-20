@@ -4,8 +4,8 @@ dtn::HUDMainMenu::HUDMainMenu()
 {
 	m_window = sfg::Window::Create();
 	m_guiLayout = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
-	m_ipEntry = sfg::Entry::Create();
-	m_playerNumberEntry = sfg::Entry::Create();
+	m_ipEntry = sfg::Entry::Create("ip");
+	m_playerNumberEntry = sfg::Entry::Create("pnum");
 	m_playOnlineButton = sfg::Button::Create("Play Online");
 	m_quitButton = sfg::Button::Create("Exit");
 	m_guiLayout->Pack(m_ipEntry);
@@ -27,7 +27,12 @@ dtn::HUDMainMenu::HUDMainMenu()
 
 	m_desktop.Add(m_window);
 
-	gameShouldClose = false;
+	m_stupidRectThatHasToBeDrawn.setFillColor(sf::Color::Black);
+}
+
+dtn::HUDMainMenu::~HUDMainMenu()
+{
+	m_desktop.RemoveAll();
 }
 
 void dtn::HUDMainMenu::update(float dt)
@@ -35,11 +40,10 @@ void dtn::HUDMainMenu::update(float dt)
 	m_desktop.Update(dt);
 }
 
-void dtn::HUDMainMenu::render(sf::RenderWindow & dest, sfg::SFGUI& sfgui)
+void dtn::HUDMainMenu::render(sf::RenderWindow & dest)
 {
-	if (gameShouldClose)
-		dest.close();
-	sfgui.Display(dest);
+	dest.draw(m_stupidRectThatHasToBeDrawn);
+	sfg::Renderer::Get().Display(dest);
 }
 
 void dtn::HUDMainMenu::handleEvent(sf::Event e)
@@ -49,10 +53,13 @@ void dtn::HUDMainMenu::handleEvent(sf::Event e)
 
 void dtn::HUDMainMenu::onPlayOnlineButtonClicked()
 {
-
+	dtn::SceneManager::getInstance()->runScene(
+		std::shared_ptr<GameClient>(new GameClient(std::atoi(
+			m_playerNumberEntry->GetText().toAnsiString().c_str()), 
+			m_ipEntry->GetText().toAnsiString())));
 }
 
 void dtn::HUDMainMenu::onQuitButtonClicked()
 {
-	gameShouldClose = true;
+
 }

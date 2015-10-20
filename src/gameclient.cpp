@@ -63,10 +63,10 @@ void dtn::GameClient::update(float dt, sf::RenderWindow& window)
 /*
 	Called once per loop iteration to draw to the game window.
 */
-void dtn::GameClient::render(sf::RenderWindow& target, sfg::SFGUI& sfgui)
+void dtn::GameClient::render(sf::RenderWindow& target)
 {
 	m_screen->render(target);
-	m_hud->render(target, sfgui);
+	m_hud->render(target);
 }
 
 // receiveStrings

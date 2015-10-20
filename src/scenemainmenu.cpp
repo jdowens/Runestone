@@ -21,7 +21,7 @@ void dtn::SceneMainMenu::update(float dt, sf::RenderWindow & window)
 	m_hud->update(dt);
 }
 
-void dtn::SceneMainMenu::render(sf::RenderWindow & target, sfg::SFGUI& sfgui)
+void dtn::SceneMainMenu::render(sf::RenderWindow & target)
 {
-	m_hud->render(target, sfgui);
+	m_hud->render(target);
 }

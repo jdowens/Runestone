@@ -18,7 +18,7 @@ namespace dtn
 		SceneMainMenu();
 		virtual void onAttach();
 		virtual void update(float dt, sf::RenderWindow& window);
-		virtual void render(sf::RenderWindow& target, sfg::SFGUI& sfgui);
+		virtual void render(sf::RenderWindow& target);
 	private :
 		
 	};

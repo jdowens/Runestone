@@ -11,7 +11,7 @@ int main()
 		, "Game Client", sf::Style::Default & ~sf::Style::Resize);
 	sf::Clock clock;
 	sfg::SFGUI sfgui;
-	
+	/*
 	int pnum;
 	std::cout << "ENTER PLAYER NUMBER: ";
 	std::cin >> pnum;
@@ -19,15 +19,22 @@ int main()
 	std::cout << "ENTER SERVER IP: ";
 	std::cin >> ip;
 	dtn::GameClient client(pnum, ip);
-	client.onAttach();
+	client.onAttach();*/
+	//dtn::SceneMainMenu client;
+	//client.onAttach();
+
+	dtn::SceneManager::getInstance()->runScene(std::shared_ptr<dtn::SceneMainMenu>(
+		new dtn::SceneMainMenu()));
+
 	while (true)
 	{
 		float dt = clock.restart().asSeconds();
-		client.update(dt, window);
+		dtn::SceneManager::getInstance()->update(dt, window);
 		window.clear();
-		client.render(window, sfgui);
+		dtn::SceneManager::getInstance()->render(window);
 		window.display();
 	}
+
 	dtn::RunestoneDatabase::getInstance()->generateWriteToFile("names.txt", "condensed_database.csv");
 	return 0;
 }

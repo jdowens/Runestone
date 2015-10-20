@@ -38,7 +38,7 @@ namespace dtn
 		virtual void update(float dt, sf::RenderWindow& window);
 
 		// render function
-		virtual void render(sf::RenderWindow& target, sfg::SFGUI& sfgui);
+		virtual void render(sf::RenderWindow& target);
 	private :
 
 		// TCP communication function (receive)
