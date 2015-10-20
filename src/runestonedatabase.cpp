@@ -173,7 +173,8 @@ dtn::RunestoneDatabase::RunestoneDatabase(std::string fileName)
 		temp.m_range = std::atoi(vecLine[4].c_str());
 		temp.m_speed = std::atoi(vecLine[5].c_str());
 		temp.m_los = std::atoi(vecLine[6].c_str());
-		temp.m_cost = calculateCost(temp);
+		temp.m_cost = std::atoi(vecLine[7].c_str());
+			//calculateCost(temp);
 		m_database[temp.m_id] = temp;
 	}
 }

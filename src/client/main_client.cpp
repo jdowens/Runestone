@@ -11,7 +11,7 @@ int main()
 		, "Game Client", sf::Style::Default & ~sf::Style::Resize);
 	sf::Clock clock;
 	sfg::SFGUI sfgui;
-	/*
+	
 	int pnum;
 	std::cout << "ENTER PLAYER NUMBER: ";
 	std::cin >> pnum;
@@ -29,16 +29,5 @@ int main()
 		window.display();
 	}
 	dtn::RunestoneDatabase::getInstance()->generateWriteToFile("names.txt", "condensed_database.csv");
-	*/
-	dtn::SceneMainMenu mmScene;
-	mmScene.onAttach();
-	while (true)
-	{
-		float dt = clock.restart().asSeconds();
-		mmScene.update(dt, window);
-		window.clear(sf::Color::Black);
-		mmScene.render(window, sfgui);
-		window.display();
-	}
 	return 0;
 }
