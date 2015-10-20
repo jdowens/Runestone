@@ -21,14 +21,14 @@ void dtn::SceneMultiplayerMatch::onAttach(sf::RenderWindow & dest)
 
 void dtn::SceneMultiplayerMatch::update(float dt, sf::RenderWindow & window)
 {
-	// update communication
-	m_client->update(dt);
 	// update game screen
 	m_screen->update(dt);
 	// handle events
 	m_inputhandler->update(window, m_screen, m_hud);
 	// update HUD
 	m_hud->update(dt);
+	// update communication
+	m_client->update(dt);
 }
 
 void dtn::SceneMultiplayerMatch::render(sf::RenderWindow & target)

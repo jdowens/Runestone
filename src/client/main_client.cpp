@@ -20,20 +20,24 @@ int main()
 	//	, "Game Client", sf::Style::Default & ~sf::Style::Resize);
 	dtn::SceneManager::getInstance()->runScene(std::shared_ptr<dtn::SceneMainMenu>(
 		new dtn::SceneMainMenu()));
-	//dtn::GameClient p1(1, "localhost");
-	//dtn::GameClient p2(2, "localhost");
+	//dtn::SceneMultiplayerMatch p1(1, "localhost");
+	//dtn::SceneMultiplayerMatch p2(2, "localhost");
 	//p1.onAttach(p1Win);
 	//p2.onAttach(p2Win);
 
 	while (true)
 	{
 		float dt = clock.restart().asSeconds();
+		//p1Win.clear();
+		//p2Win.clear();
 		//p1.update(dt, p1Win);
-		//p1.render(p2Win);
+		//p1.render(p1Win);
 		//p2.update(dt, p2Win);
 		//p2.render(p2Win);
 		dtn::SceneManager::getInstance()->update(dt);
 		dtn::SceneManager::getInstance()->render();
+		//p1Win.display();
+		//p2Win.display();
 		//server.update();
 	}
 
