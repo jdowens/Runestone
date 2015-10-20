@@ -34,6 +34,9 @@ namespace dtn
 
 		// called once per loop iteration
 		void update();
+
+		// can initialize without running run()
+		void initialize();
 	private :
 		bool m_running;										// true if both players are connected, false if one quits
 		std::vector<dtn::Player> m_players;					// two players

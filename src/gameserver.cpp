@@ -66,13 +66,7 @@ dtn::GameServer::GameServer()
 */
 void dtn::GameServer::run()
 {
-	// listen on port 5555 and accept two connections
-	m_listener.listen(5555);
-	m_listener.accept(m_p1Socket);
-	m_listener.accept(m_p2Socket);
-	// launch two threads
-	m_thread1.launch();
-	m_thread2.launch();
+	initialize();
 	// run main loop
 	while (m_running)
 	{
@@ -125,6 +119,17 @@ void dtn::GameServer::update()
 	m_sendEventManager.update();
 	m_exclusiveP1SendManager.update();
 	m_exclusiveP2SendManager.update();
+}
+
+void dtn::GameServer::initialize()
+{
+	// listen on port 5555 and accept two connections
+	m_listener.listen(5555);
+	m_listener.accept(m_p1Socket);
+	m_listener.accept(m_p2Socket);
+	// launch two threads
+	m_thread1.launch();
+	m_thread2.launch();
 }
 
 // event listeners below
