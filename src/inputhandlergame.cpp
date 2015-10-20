@@ -1,7 +1,8 @@
 #include "inputhandlergame.h"
 
-dtn::InputHandlerGame::InputHandlerGame(int playerID)
+dtn::InputHandlerGame::InputHandlerGame(int playerID, std::shared_ptr<EventManager> eventManager)
 {
+	m_eventManager = eventManager;
 	m_playerID = playerID;
 	m_battlefieldZone = sf::IntRect(
 		dtn::Utilities::BOARD_LEFT, dtn::Utilities::BOARD_TOP,
@@ -53,7 +54,7 @@ void dtn::InputHandlerGame::updateHovered(GameScreen* screen)
 			// don't get decal of opponent's pieces
 			if (m_hovered->getOwner() == m_playerID)
 			{
-				dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<Event>(
+				m_eventManager->pushEvent(std::shared_ptr<Event>(
 					new EventRequestEntityMoveDecal(m_playerID,
 						dtn::Utilities::MouseToGlobalTile(dtn::Utilities::FloatVecToInt(
 							m_hovered->getSprite().getPosition()), m_playerID))));
@@ -91,7 +92,7 @@ void dtn::InputHandlerGame::handleEvents(sf::RenderWindow& window, GameScreen* s
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();
-			dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventGameQuit()));
+			m_eventManager->pushEvent(std::shared_ptr<dtn::Event>(new dtn::EventGameQuit()));
 		}
 		else if (event.type == sf::Event::MouseButtonPressed &&
 			event.mouseButton.button == sf::Mouse::Button::Left)
@@ -104,7 +105,7 @@ void dtn::InputHandlerGame::handleEvents(sf::RenderWindow& window, GameScreen* s
 				dtn::Utilities::BOARD_WIDTH + dtn::Utilities::BOARD_LEFT,
 				(dtn::Utilities::BOARD_HEIGHT + dtn::Utilities::BOARD_TOP) / 2))
 			{
-				dtn::GlobalEventQueue::getInstance()->pushEvent(
+				m_eventManager->pushEvent(
 					std::shared_ptr<dtn::Event>(new dtn::EventEndTurn(m_playerID)));
 			}
 		}
@@ -117,7 +118,7 @@ void dtn::InputHandlerGame::handleEvents(sf::RenderWindow& window, GameScreen* s
 					m_selected->getSprite().getPosition()), m_playerID);
 				sf::Vector2i tileDest = dtn::Utilities::MouseToGlobalTile(dtn::Utilities::FloatVecToInt(
 					m_hovered->getSprite().getPosition()), m_playerID);
-				dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<dtn::Event>(
+				m_eventManager->pushEvent(std::shared_ptr<dtn::Event>(
 					new dtn::EventRunestoneAttack(tileSource, tileDest)));
 			}
 			else if (m_selected != NULL)
@@ -127,12 +128,12 @@ void dtn::InputHandlerGame::handleEvents(sf::RenderWindow& window, GameScreen* s
 					m_selected->getSprite().getPosition()), m_playerID);
 				if (m_handZone.contains(sourcePos))
 				{
-					dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<dtn::Event>(
+					m_eventManager->pushEvent(std::shared_ptr<dtn::Event>(
 						new dtn::EventRunestonePlay(m_selected->getEntityID(), destPos)));
 				}
 				else if (m_battlefieldZone.contains(sourcePos))
 				{
-					dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<dtn::Event>(
+					m_eventManager->pushEvent(std::shared_ptr<dtn::Event>(
 						new dtn::EventRunestoneMove(sourcePos, destPos)));
 					screen->m_movementDecal.setInvisible();
 				}
@@ -147,7 +148,7 @@ void dtn::InputHandlerGame::handleEvents(sf::RenderWindow& window, GameScreen* s
 		else if (event.type == sf::Event::KeyPressed &&
 			event.key.code == sf::Keyboard::Space)
 		{
-			dtn::GlobalEventQueue::getInstance()->pushEvent(std::shared_ptr<dtn::Event>(
+			m_eventManager->pushEvent(std::shared_ptr<dtn::Event>(
 				new dtn::EventEndTurn(m_playerID)));
 		}
 		else if (event.type == sf::Event::Resized)

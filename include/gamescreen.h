@@ -36,7 +36,7 @@ namespace dtn
 		friend class InputHandlerGame;
 	public :
 		// constructors
-		GameScreen(int playerID);
+		GameScreen(int playerID, std::shared_ptr<EventManager> eventManager);
 
 		// update function (called once per global loop)
 		virtual void update(float dt);
@@ -57,6 +57,7 @@ namespace dtn
 		dtn::MovementDecal m_movementDecal;
 		dtn::LOSDecal m_LOSDecal;
 		int m_playerID;
+		std::shared_ptr<EventManager> m_eventManager;
 
 		// event listeners
 		void initializeListeners();

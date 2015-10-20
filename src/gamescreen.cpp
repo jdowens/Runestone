@@ -1,8 +1,9 @@
 #include "gamescreen.h"
 
-dtn::GameScreen::GameScreen(int playerID)
+dtn::GameScreen::GameScreen(int playerID, std::shared_ptr<EventManager> eventManager)
 	: m_movementDecal(playerID), m_LOSDecal(playerID)
 {
+	m_eventManager = eventManager;
 	m_tooltip.setInvisible();
 
 	m_movementDecal.setInvisible();
@@ -188,21 +189,21 @@ void dtn::GameScreen::onUpdateRenderableOwner(std::shared_ptr<dtn::Event> e)
 void dtn::GameScreen::initializeListeners()
 {
 	// attach listeners
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_DRAWN,
+	m_eventManager->attachListener(dtn::Event::EventType::ENTITY_DRAWN,
 		std::bind(&GameScreen::onEntityDrawn, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVED,
+	m_eventManager->attachListener(dtn::Event::EventType::ENTITY_MOVED,
 		std::bind(&GameScreen::onEntityMoved, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_BATTLE,
+	m_eventManager->attachListener(dtn::Event::EventType::ENTITY_BATTLE,
 		std::bind(&GameScreen::onEntityBattle, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_ADDED,
+	m_eventManager->attachListener(dtn::Event::EventType::ENTITY_ADDED,
 		std::bind(&GameScreen::onEntityAdded, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
+	m_eventManager->attachListener(dtn::Event::EventType::ENTITY_MOVE_FLAG_CHANGED,
 		std::bind(&GameScreen::onEntityMoveFlagChanged, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL,
+	m_eventManager->attachListener(dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL,
 		std::bind(&GameScreen::onReceivedEntityMoveDecal, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL,
+	m_eventManager->attachListener(dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL,
 		std::bind(&GameScreen::onReceivedBoardLOSDecal, this, std::placeholders::_1));
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::DELETE_RENDERABLE,
+	m_eventManager->attachListener(dtn::Event::EventType::DELETE_RENDERABLE,
 		std::bind(&GameScreen::onDeleteRenderable, this, std::placeholders::_1));
 }
 

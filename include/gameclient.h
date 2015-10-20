@@ -29,7 +29,7 @@ namespace dtn
 	{
 	public :
 		// constructor
-		GameClient(int playerID, std::string ip);
+		GameClient(int playerID, std::string ip, std::shared_ptr<EventManager> eventManager);
 		
 		// on attach
 		void connectToServer();
@@ -50,12 +50,9 @@ namespace dtn
 		sf::Mutex m_mutex;										// global mutex (for dual thread communication)
 		sf::Thread m_thread;									// one thread used to receive data asynchronously
 		std::string m_ip;										// the ip address of the server
-																
+		std::shared_ptr<EventManager> m_eventManager;			// event manager for communication
+
 		// listeners
-		void onEntityDrawn(std::shared_ptr<dtn::Event> e);
-		void onEntityMoved(std::shared_ptr<dtn::Event> e);
-		void onEntityBattle(std::shared_ptr<dtn::Event> e);
-		void onEntityAdded(std::shared_ptr<dtn::Event> e);
 		void onGameQuit(std::shared_ptr<dtn::Event> e);
 	};
 }

@@ -3,7 +3,7 @@
 dtn::PlayerView::PlayerView(int playerID) : View(playerID), m_window(
 	sf::VideoMode(dtn::Utilities::WINDOW_WIDTH, dtn::Utilities::WINDOW_HEIGHT, 32), "Player View Test"), m_player(playerID),
 	m_battlefield(sf::Vector2i(dtn::Utilities::BOARD_WIDTH, dtn::Utilities::BOARD_HEIGHT)),
-	m_screen(playerID)
+	m_screen(playerID, std::make_shared<EventManager>())
 {
 	m_window.setVisible(false);
 	m_screen.loadBackground("Resources/tilemap.png");

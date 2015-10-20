@@ -1,8 +1,10 @@
 #include "HUDgame.h"
 
-dtn::HUDgame::HUDgame(int player_ID, sf::RenderWindow& dest)
+dtn::HUDgame::HUDgame(int player_ID, sf::RenderWindow& dest, 
+	std::shared_ptr<EventManager> eventManager)
 	: HUD(dest)
 {
+	m_eventManager = eventManager;
 	m_playerID = player_ID;
 	m_playerMana = 0;
 	m_opponentMana = 0;
@@ -41,7 +43,7 @@ dtn::HUDgame::HUDgame(int player_ID, sf::RenderWindow& dest)
 	setOpponentManaText(0);
 
 	// setup listeners
-	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::MANA_CHANGED,
+	m_eventManager->attachListener(dtn::Event::EventType::MANA_CHANGED,
 		std::bind(&HUDgame::onManaChanged, this, std::placeholders::_1));
 }
 
@@ -85,6 +87,6 @@ void dtn::HUDgame::onManaChanged(std::shared_ptr<dtn::Event> e)
 
 void dtn::HUDgame::onEndTurnButtonClicked()
 {
-	dtn::GlobalEventQueue::getInstance()->pushEvent(
+	m_eventManager->pushEvent(
 		std::shared_ptr<dtn::Event>(new dtn::EventEndTurn(m_playerID)));
 }

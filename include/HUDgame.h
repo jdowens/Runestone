@@ -10,7 +10,7 @@ namespace dtn
 	class HUDgame : public HUD
 	{
 	public:
-		HUDgame(int player_ID, sf::RenderWindow& dest);
+		HUDgame(int player_ID, sf::RenderWindow& dest, std::shared_ptr<EventManager> eventManager);
 		~HUDgame();
 		virtual void update(float dt);
 		virtual void handleEvent(sf::Event e);
@@ -18,6 +18,7 @@ namespace dtn
 		int m_playerMana;
 		int m_opponentMana;
 		int m_playerID;
+		std::shared_ptr<EventManager> m_eventManager;
 		tgui::VerticalLayout::Ptr m_layout;
 		tgui::Label::Ptr m_playerManaText;
 		tgui::Label::Ptr m_opponentManaText;
