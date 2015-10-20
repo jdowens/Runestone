@@ -77,7 +77,8 @@ namespace dtn
 		std::shared_ptr<dtn::EntityBattlefield> closestEnemy(std::vector<std::shared_ptr<dtn::EntityBattlefield>> list, 
 			std::shared_ptr<dtn::EntityBattlefield> ent);
 		std::shared_ptr<dtn::EntityBattlefield> closestEnemyInRange(std::shared_ptr<EntityBattlefield> ent);
-		
+		sf::Vector2i randomAvailablePlayLocation(int playerID);
+
 	private :
 		// w,h dimensions of board
 		sf::Vector2i m_dimension;				

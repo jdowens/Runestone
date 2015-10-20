@@ -551,6 +551,28 @@ std::shared_ptr<dtn::EntityBattlefield> dtn::Battlefield::closestEnemyInRange(st
 		return NULL;
 }
 
+sf::Vector2i dtn::Battlefield::randomAvailablePlayLocation(int playerID)
+{
+	sf::Vector2i ret;
+	ret.x = -1;
+	ret.y = m_playLocations[playerID].top;
+
+	bool found = false;
+	int iterations = 0;
+	while (!found && iterations < 16)
+	{
+		iterations++;
+		int randx =
+			static_cast<int>(dtn::Utilities::randFloat(0, 1)*dtn::Utilities::BOARD_WIDTH) + dtn::Utilities::BOARD_LEFT;
+		ret.x = randx;
+		if (m_playLocations[playerID].contains(ret) && getEntityBattlefieldAt(ret) == NULL)
+		{
+			found = true;
+		}
+	}
+	return ret;
+}
+
 void dtn::Battlefield::determineValidMoveLocations(sf::Vector2i curPos, int distTraveled, int range, std::vector<sf::Vector2i>& list)
 {
 	sf::Vector2i left(curPos.x - 1, curPos.y);

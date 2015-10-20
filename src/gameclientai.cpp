@@ -56,20 +56,14 @@ void dtn::GameClientAI::playOutHand()
 	{
 		if ((*it)->getCost() <= player->getCurrentMana())
 		{
-			for (int i = dtn::Utilities::BOARD_LEFT; i < dtn::Utilities::BOARD_LEFT +
-				dtn::Utilities::BOARD_WIDTH; i++)
+			auto playPos = battlefield->randomAvailablePlayLocation(m_playerID);
+			if (playPos.x != -1)
 			{
-				sf::Vector2i pos = 
-					dtn::Utilities::LocalTileToGlobal(
-						sf::Vector2i(i, dtn::Utilities::BOARD_TOP + dtn::Utilities::BOARD_HEIGHT - 1), m_playerID);
-				if (battlefield->getEntityBattlefieldAt(pos) == NULL)
-				{
-					m_eventManager->pushEvent(std::make_shared<EventRunestonePlay>(
-						(*it)->getEntityID(), pos));
-					playedSomething = true;
-					// found somewhere to play
-					break;
-				}
+				m_eventManager->pushEvent(std::make_shared<EventRunestonePlay>(
+					(*it)->getEntityID(), playPos));
+				playedSomething = true;
+				// found somewhere to play
+				break;
 			}
 		}
 	}
