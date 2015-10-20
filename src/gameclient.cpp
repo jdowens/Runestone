@@ -34,9 +34,9 @@ dtn::GameClient::GameClient(int playerID, std::string ip)
 	m_running = true;
 }
 
-void dtn::GameClient::onAttach()
+void dtn::GameClient::onAttach(sf::RenderWindow& dest)
 {
-	m_hud = std::shared_ptr<HUD>(new HUDgame(m_playerID));
+	m_hud = std::shared_ptr<HUD>(new HUDgame(m_playerID, dest));
 	m_socket.connect(m_ip, 5555);
 	m_thread.launch();
 }

@@ -1,34 +1,33 @@
 #include "HUDgame.h"
 
-dtn::HUDgame::HUDgame(int player_ID)
+dtn::HUDgame::HUDgame(int player_ID, sf::RenderWindow& dest)
+	: HUD(dest)
 {
 	m_playerID = player_ID;
 	m_playerMana = 0;
 	m_opponentMana = 0;
 
-	// setup gui layour
-	m_window = sfg::Window::Create();
-	m_guiLayout = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
-
 	// setup labels
-	m_playerManaText = sfg::Label::Create();
-	m_opponentManaText = sfg::Label::Create();
+	m_playerManaText = std::make_shared<tgui::Label>(tgui::Label());
+	m_playerManaText->setText("Your mana: 0");
+	m_opponentManaText = std::make_shared<tgui::Label>(tgui::Label());
+	m_opponentManaText->setText("Your opponent's mana: 0");
 
 	// setup button
-	m_endTurnButton = sfg::Button::Create("End Turn");
-	m_endTurnButton->GetSignal(sfg::Button::OnLeftClick).Connect(
+	m_endTurnButton = std::make_shared<tgui::Button>(tgui::Button());
+	m_endTurnButton->setText("End Turn");
+	m_endTurnButton->connect("clicked",
 		std::bind(&HUDgame::onEndTurnButtonClicked, this));
 
-	// pack the gui
-	m_guiLayout->Pack(m_opponentManaText);
-	m_guiLayout->Pack(m_endTurnButton);
-	m_guiLayout->Pack(m_playerManaText);
-	m_window->Add(m_guiLayout);
-	m_window->SetPosition(sf::Vector2f((dtn::Utilities::BOARD_LEFT + dtn::Utilities::BOARD_WIDTH)*
-		dtn::Utilities::PIXELS_PER_TILE_X, 0.0f));
-	m_window->SetRequisition(sf::Vector2f(dtn::Utilities::BOARD_LEFT*dtn::Utilities::PIXELS_PER_TILE_X,
-		(dtn::Utilities::BOARD_TOP * 2 + dtn::Utilities::BOARD_HEIGHT)*dtn::Utilities::PIXELS_PER_TILE_Y));
-	m_window->SetStyle(m_window->GetStyle() & ~sfg::Window::Style::RESIZE);
+	dtn::WidgetUtilities::layoutBegin();
+	m_opponentManaText->setPosition(dtn::WidgetUtilities::windowLeftJustified(m_opponentManaText));
+	m_endTurnButton->setPosition(dtn::WidgetUtilities::windowLeftJustified(m_endTurnButton));
+	m_playerManaText->setPosition(dtn::WidgetUtilities::windowLeftJustified(m_playerManaText));
+	dtn::WidgetUtilities::layoutEnd();
+
+	m_GUI->add(m_playerManaText);
+	m_GUI->add(m_opponentManaText);
+	m_GUI->add(m_endTurnButton);
 
 	// initialize mana text
 	setPlayerManaText(0);
@@ -39,33 +38,33 @@ dtn::HUDgame::HUDgame(int player_ID)
 		std::bind(&HUDgame::onManaChanged, this, std::placeholders::_1));
 }
 
-void dtn::HUDgame::update(float dt)
+dtn::HUDgame::~HUDgame()
 {
-	m_window->Update(dt);
+	m_GUI->removeAllWidgets();
 }
 
-void dtn::HUDgame::render(sf::RenderWindow & dest)
+void dtn::HUDgame::update(float dt)
 {
-	sfg::Renderer::Get().Display(dest);
+
 }
 
 void dtn::HUDgame::handleEvent(sf::Event e)
 {
-	m_window->HandleEvent(e);
+	m_GUI->handleEvent(e);
 }
 
 void dtn::HUDgame::setPlayerManaText(int amount)
 {
 	std::stringstream ss;
 	ss << "Your mana: " << amount;
-	m_playerManaText->SetText(ss.str());
+	m_playerManaText->setText(ss.str());
 }
 
 void dtn::HUDgame::setOpponentManaText(int amount)
 {
 	std::stringstream ss;
 	ss << "Your opponent's mana: " << amount;
-	m_opponentManaText->SetText(ss.str());
+	m_opponentManaText->setText(ss.str());
 }
 
 void dtn::HUDgame::onManaChanged(std::shared_ptr<dtn::Event> e)

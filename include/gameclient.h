@@ -32,7 +32,7 @@ namespace dtn
 		GameClient(int playerID, std::string ip);
 		
 		// on attach
-		virtual void onAttach();
+		virtual void onAttach(sf::RenderWindow& dest);
 
 		// update (one loop iteration)
 		virtual void update(float dt, sf::RenderWindow& window);

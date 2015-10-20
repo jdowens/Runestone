@@ -1,67 +1,57 @@
 #include "HUDmainmenu.h"
 
-dtn::HUDMainMenu::HUDMainMenu()
+dtn::HUDMainMenu::HUDMainMenu(sf::RenderWindow& dest)
+	: HUD(dest)
 {
-	m_window = sfg::Window::Create();
-	m_guiLayout = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
-	m_ipEntry = sfg::Entry::Create("ip");
-	m_playerNumberEntry = sfg::Entry::Create("pnum");
-	m_playOnlineButton = sfg::Button::Create("Play Online");
-	m_quitButton = sfg::Button::Create("Exit");
-	m_guiLayout->Pack(m_ipEntry);
-	m_guiLayout->Pack(m_playerNumberEntry);
-	m_guiLayout->Pack(m_playOnlineButton);
-	m_guiLayout->Pack(m_quitButton);
-	m_window->Add(m_guiLayout);
+	m_ipAddressEntry = std::make_shared<tgui::EditBox>(tgui::EditBox());
+	m_playerNumberEntry = std::make_shared<tgui::EditBox>(tgui::EditBox());
+	m_playOnlineButton = std::make_shared<tgui::Button>(tgui::Button());
+	m_quitButton = std::make_shared<tgui::Button>(tgui::Button());
 
-	m_window->SetPosition(sf::Vector2f((dtn::Utilities::BOARD_LEFT + dtn::Utilities::BOARD_WIDTH)*
-		dtn::Utilities::PIXELS_PER_TILE_X, 0.0f));
-	m_window->SetRequisition(sf::Vector2f(dtn::Utilities::BOARD_LEFT*dtn::Utilities::PIXELS_PER_TILE_X,
-		(dtn::Utilities::BOARD_TOP * 2 + dtn::Utilities::BOARD_HEIGHT)*dtn::Utilities::PIXELS_PER_TILE_Y));
-	m_window->SetStyle(m_window->GetStyle() & ~sfg::Window::Style::RESIZE);
+	dtn::WidgetUtilities::layoutBegin();
+	m_ipAddressEntry->setPosition(dtn::WidgetUtilities::windowCentered(m_ipAddressEntry));
+	m_playerNumberEntry->setPosition(dtn::WidgetUtilities::windowCentered(m_playerNumberEntry));
+	m_playOnlineButton->setPosition(dtn::WidgetUtilities::windowCentered(m_playOnlineButton));
+	m_quitButton->setPosition(dtn::WidgetUtilities::windowCentered(m_quitButton));
+	dtn::WidgetUtilities::layoutEnd();
 
-	m_playOnlineButton->GetSignal(sfg::Button::OnLeftClick).Connect(
-		std::bind(&HUDMainMenu::onPlayOnlineButtonClicked, this));
-	m_quitButton->GetSignal(sfg::Button::OnLeftClick).Connect(
-		std::bind(&HUDMainMenu::onQuitButtonClicked, this));
+	m_playOnlineButton->connect("clicked", std::bind(
+		&HUDMainMenu::onPlayOnlineButtonClicked, this));
+	m_quitButton->connect("clicked", std::bind(
+		&HUDMainMenu::onQuitButtonClicked, this));
 
-	//m_desktop.Add(m_window);
-
-	m_stupidRectThatHasToBeDrawn.setFillColor(sf::Color::Black);
+	m_GUI->add(m_ipAddressEntry);
+	m_GUI->add(m_playerNumberEntry);
+	m_GUI->add(m_playOnlineButton);
+	m_GUI->add(m_quitButton);
 }
 
 dtn::HUDMainMenu::~HUDMainMenu()
 {
-	//m_desktop.RemoveAll();
-
+	m_GUI->removeAllWidgets();
 }
 
 void dtn::HUDMainMenu::update(float dt)
 {
-	m_window->Update(dt);
-}
 
-void dtn::HUDMainMenu::render(sf::RenderWindow & dest)
-{
-	dest.draw(m_stupidRectThatHasToBeDrawn);
-	sfg::Renderer::Get().Display(dest);
 }
 
 void dtn::HUDMainMenu::handleEvent(sf::Event e)
 {
-	m_window->HandleEvent(e);
+	m_GUI->handleEvent(e);
 }
 
 void dtn::HUDMainMenu::onPlayOnlineButtonClicked()
 {
-	dtn::SceneManager::getInstance()->runScene(
-		std::shared_ptr<GameClient>(new GameClient(1, "localhost")));
-	/*std::atoi(
-		m_playerNumberEntry->GetText().toAnsiString().c_str()),
-		m_ipEntry->GetText().toAnsiString()))*/
+	std::cout << "Play clicked!\n";
+	std::shared_ptr<dtn::GameClient> gc;
+	gc = std::shared_ptr<dtn::GameClient>(new GameClient(
+		std::atoi(m_playerNumberEntry->getText().toAnsiString().c_str()), 
+		m_ipAddressEntry->getText().toAnsiString()));
+	dtn::SceneManager::getInstance()->runScene(gc);
 }
 
 void dtn::HUDMainMenu::onQuitButtonClicked()
 {
-
+	std::cout << "Quit clicked!\n";
 }

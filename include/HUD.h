@@ -5,8 +5,7 @@
 
 #include<SFML/Window.hpp>
 #include<SFML/Graphics.hpp>
-#include<SFGUI/SFGUI.hpp>
-#include<SFGUI/Widgets.hpp>
+#include<TGUI/TGUI.hpp>
 
 #include "globaleventqueue.h"
 #include "event.h"
@@ -17,11 +16,12 @@ namespace dtn
 	class HUD
 	{
 	public :
-		HUD();
+		HUD(sf::RenderWindow& dest);
 		virtual void update(float dt) = 0;
-		virtual void render(sf::RenderWindow& dest) = 0;
+		virtual void render(sf::RenderWindow& dest);
 		virtual void handleEvent(sf::Event e) = 0;
-	private :
+	protected :
+		static std::shared_ptr<tgui::Gui> m_GUI;
 	};
 }
 

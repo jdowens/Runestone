@@ -18,7 +18,7 @@ namespace dtn
 		Scene();
 
 		// when attached
-		virtual void onAttach() = 0;
+		virtual void onAttach(sf::RenderWindow& dest) = 0;
 
 		// update (one loop iteration)
 		virtual void update(float dt, sf::RenderWindow& window) = 0;

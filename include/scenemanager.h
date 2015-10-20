@@ -12,11 +12,13 @@ namespace dtn
 	public :
 		static std::shared_ptr<dtn::SceneManager> getInstance();
 		void runScene(std::shared_ptr<Scene> scene);
-		void update(float dt, sf::RenderWindow& window);
-		void render(sf::RenderWindow& window);
+		void update(float dt);
+		void render();
 	private :
 		SceneManager();
+		sf::RenderWindow m_window;
 		std::shared_ptr<Scene> m_currentScene;
+		std::shared_ptr<Scene> m_nextScene;
 		static std::shared_ptr<dtn::SceneManager> m_instance;
 	};
 }
