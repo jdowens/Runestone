@@ -48,11 +48,11 @@ void dtn::HUDMainMenu::handleEvent(sf::Event e)
 void dtn::HUDMainMenu::onPlayOnlineButtonClicked()
 {
 	std::cout << "Play clicked!\n";
-	std::shared_ptr<dtn::GameClient> gc;
-	gc = std::shared_ptr<dtn::GameClient>(new GameClient(
+	std::shared_ptr<dtn::SceneMultiplayerMatch> match;
+	match = std::shared_ptr<dtn::SceneMultiplayerMatch>(new SceneMultiplayerMatch(
 		std::atoi(m_playerNumberEntry->getText().toAnsiString().c_str()), 
 		m_ipAddressEntry->getText().toAnsiString()));
-	dtn::SceneManager::getInstance()->runScene(gc);
+	dtn::SceneManager::getInstance()->runScene(match);
 }
 
 void dtn::HUDMainMenu::onQuitButtonClicked()

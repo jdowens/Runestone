@@ -4,7 +4,7 @@
 #include<SFML/Graphics.hpp>
 #include<TGUI/TGUI.hpp>
 #include "scenemanager.h"
-#include "gameclient.h"
+#include "scenemultiplayermatch.h"
 #include "HUD.h"
 #include "utilities.h"
 #include "globaleventqueue.h"

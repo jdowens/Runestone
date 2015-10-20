@@ -7,14 +7,7 @@
 dtn::GameClient::GameClient(int playerID, std::string ip)
 	: m_thread(&GameClient::receiveStrings, this)
 {
-	m_screen = std::shared_ptr<Screen>(new GameScreen(playerID));
-	m_inputhandler = std::shared_ptr<InputHandler>(new InputHandlerGame(playerID));
-	m_screen->loadBackground("Resources/tilemap.png");
-	m_screen->moveBackground(sf::Vector2f(dtn::Utilities::BOARD_LEFT*
-		dtn::Utilities::PIXELS_PER_TILE_X,
-		dtn::Utilities::BOARD_TOP*dtn::Utilities::PIXELS_PER_TILE_Y));
 	m_playerID = playerID;
-
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::END_TURN,
 		std::bind(&GameClient::sendString, this, std::placeholders::_1));
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::RUNESTONE_ATTACK,
@@ -31,12 +24,10 @@ dtn::GameClient::GameClient(int playerID, std::string ip)
 	dtn::GlobalEventQueue::getInstance()->attachListener(dtn::Event::EventType::GAME_QUIT,
 		std::bind(&GameClient::onGameQuit, this, std::placeholders::_1));
 	m_ip = ip;
-	m_running = true;
 }
 
-void dtn::GameClient::onAttach(sf::RenderWindow& dest)
+void dtn::GameClient::connectToServer()
 {
-	m_hud = std::shared_ptr<HUD>(new HUDgame(m_playerID, dest));
 	m_socket.connect(m_ip, 5555);
 	m_thread.launch();
 }
@@ -45,28 +36,12 @@ void dtn::GameClient::onAttach(sf::RenderWindow& dest)
 /*
 	Called once per loop iteration.
 */
-void dtn::GameClient::update(float dt, sf::RenderWindow& window)
+void dtn::GameClient::update(float dt)
 {
 	// execute pending events
 	m_mutex.lock();
 	dtn::GlobalEventQueue::getInstance()->update();
 	m_mutex.unlock();
-	// update game screen
-	m_screen->update(dt);
-	// handle events
-	m_inputhandler->update(window, m_screen, m_hud);
-	// update HUD
-	m_hud->update(dt);
-}
-
-// render
-/*
-	Called once per loop iteration to draw to the game window.
-*/
-void dtn::GameClient::render(sf::RenderWindow& target)
-{
-	m_screen->render(target);
-	m_hud->render(target);
 }
 
 // receiveStrings
@@ -200,5 +175,5 @@ Callback function for when a player has requested to quit the game
 */
 void dtn::GameClient::onGameQuit(std::shared_ptr<dtn::Event> e) 
 {
-	m_running = false;
+
 }
