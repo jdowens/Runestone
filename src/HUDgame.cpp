@@ -7,6 +7,10 @@ dtn::HUDgame::HUDgame(int player_ID, sf::RenderWindow& dest)
 	m_playerMana = 0;
 	m_opponentMana = 0;
 
+	// setup layout
+	m_layout = std::make_shared<tgui::VerticalLayout>();
+	m_layout->setSize(0.25*tgui::bindWidth(*m_GUI), tgui::bindHeight(*m_GUI));
+
 	// setup labels
 	m_playerManaText = std::make_shared<tgui::Label>(tgui::Label());
 	m_playerManaText->setText("Your mana: 0");
@@ -25,9 +29,10 @@ dtn::HUDgame::HUDgame(int player_ID, sf::RenderWindow& dest)
 	m_playerManaText->setPosition(dtn::WidgetUtilities::windowLeftJustified(m_playerManaText));
 	dtn::WidgetUtilities::layoutEnd();
 
-	m_GUI->add(m_playerManaText);
-	m_GUI->add(m_opponentManaText);
-	m_GUI->add(m_endTurnButton);
+	m_GUI->add(m_layout);
+	m_layout->add(m_opponentManaText);
+	m_layout->add(m_endTurnButton);
+	m_layout->add(m_playerManaText);
 
 	// initialize mana text
 	setPlayerManaText(0);

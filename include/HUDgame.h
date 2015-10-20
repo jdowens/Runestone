@@ -18,6 +18,7 @@ namespace dtn
 		int m_playerMana;
 		int m_opponentMana;
 		int m_playerID;
+		tgui::VerticalLayout::Ptr m_layout;
 		tgui::Label::Ptr m_playerManaText;
 		tgui::Label::Ptr m_opponentManaText;
 		tgui::Button::Ptr m_endTurnButton;
