@@ -5,6 +5,7 @@
 #include<TGUI/TGUI.hpp>
 #include "scenemanager.h"
 #include "scenemultiplayermatch.h"
+#include "scenesingleplayermatch.h"
 #include "HUD.h"
 #include "utilities.h"
 #include "globaleventqueue.h"
@@ -23,8 +24,10 @@ namespace dtn
 		tgui::EditBox::Ptr m_ipAddressEntry;
 		tgui::EditBox::Ptr m_playerNumberEntry;
 		tgui::Button::Ptr m_playOnlineButton;
+		tgui::Button::Ptr m_playLocallyButton;
 		tgui::Button::Ptr m_quitButton;
 		void onPlayOnlineButtonClicked();
+		void onPlayLocallyButtonClicked();
 		void onQuitButtonClicked();
 	};
 }
