@@ -65,10 +65,10 @@ void dtn::InputHandlerGame::updateHovered(GameScreen* screen)
 	if (m_hovered != NULL)
 	{
 		screen->m_tooltip.update(m_mousePos, m_hovered->getToolTip(), m_hovered->getOwner() == m_playerID);
-		/*if (m_hovered->getOwner() == m_playerID ||
+		if (m_hovered->getOwner() == m_playerID ||
 			!screen->m_LOSDecal.contains(dtn::Utilities::MouseToGlobalTile(
 				dtn::Utilities::FloatVecToInt(m_hovered->getSprite().getPosition()),
-				m_playerID)))*/
+				m_playerID)))
 			screen->m_tooltip.setVisible();
 	}
 	else
