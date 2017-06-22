@@ -1,4 +1,4 @@
-#include "..\include\scenesingleplayermatch.h"
+#include "scenesingleplayermatch.h"
 
 dtn::SceneSingleplayerMatch::SceneSingleplayerMatch()
 {
