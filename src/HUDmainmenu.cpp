@@ -5,7 +5,7 @@ dtn::HUDMainMenu::HUDMainMenu(sf::RenderWindow& dest)
 {
 	m_layout = std::make_shared<tgui::VerticalLayout>();
 
-	m_layout->setSize(0.25*tgui::bindWidth(*m_GUI), tgui::bindHeight(*m_GUI));
+	m_layout->setSize(tgui::bindWidth(*m_GUI), tgui::bindHeight(*m_GUI));
 
 	m_ipAddressEntry = std::make_shared<tgui::EditBox>(tgui::EditBox());
 	m_ipAddressEntry->setDefaultText("IP Address");
@@ -27,7 +27,7 @@ dtn::HUDMainMenu::HUDMainMenu(sf::RenderWindow& dest)
 	m_layout->add(m_playerNumberEntry);
 	m_layout->add(m_playOnlineButton);
 	m_layout->add(m_quitButton);
-	m_layout->insertSpace(2, 20.0F);
+	//m_layout->insertSpace(2, 40.0F);
 }
 
 dtn::HUDMainMenu::~HUDMainMenu()
