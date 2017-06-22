@@ -5,7 +5,8 @@ dtn::Tooltip::Tooltip()
 {
 	m_visible = false;
 	m_rect = sf::IntRect(0, 0, 0, 0);
-	m_font.loadFromFile("Resources/source-code-pro/SourceCodePro-Black.otf");
+	//m_font.loadFromFile("Resources/source-code-pro/SourceCodePro-Black.otf");
+	m_font.loadFromFile("Resources/cabin/Cabin-Regular.ttf");
 	m_text.setFont(m_font);
 	m_text.setString("");
 	m_text.setCharacterSize(FONT_SIZE);
