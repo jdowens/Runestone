@@ -13,11 +13,15 @@ dtn::HUDMainMenu::HUDMainMenu(sf::RenderWindow& dest)
 	m_playerNumberEntry->setDefaultText("Player Number");
 
 	m_playOnlineButton = std::make_shared<tgui::Button>(tgui::Button());
+	m_playLocallyButton = std::make_shared<tgui::Button>();
 	m_quitButton = std::make_shared<tgui::Button>(tgui::Button());
 
 	m_playOnlineButton->connect("clicked", std::bind(
 		&HUDMainMenu::onPlayOnlineButtonClicked, this));
 	m_playOnlineButton->setText("Play Online");
+	m_playLocallyButton->connect("clicked", std::bind(
+		&HUDMainMenu::onPlayLocallyButtonClicked, this));
+	m_playLocallyButton->setText("Play Locally");
 	m_quitButton->connect("clicked", std::bind(
 		&HUDMainMenu::onQuitButtonClicked, this));
 	m_quitButton->setText("Quit");
@@ -26,6 +30,7 @@ dtn::HUDMainMenu::HUDMainMenu(sf::RenderWindow& dest)
 	m_layout->add(m_ipAddressEntry);
 	m_layout->add(m_playerNumberEntry);
 	m_layout->add(m_playOnlineButton);
+	m_layout->add(m_playLocallyButton);
 	m_layout->add(m_quitButton);
 	//m_layout->insertSpace(2, 40.0F);
 }
@@ -47,12 +52,19 @@ void dtn::HUDMainMenu::handleEvent(sf::Event e)
 
 void dtn::HUDMainMenu::onPlayOnlineButtonClicked()
 {
-	std::cout << "Play clicked!\n";
-	std::shared_ptr<dtn::GameClient> gc;
-	gc = std::shared_ptr<dtn::GameClient>(new GameClient(
+	std::cout << "Play online clicked!\n";
+	std::shared_ptr<dtn::SceneMultiplayerMatch> match;
+	match = std::shared_ptr<dtn::SceneMultiplayerMatch>(new SceneMultiplayerMatch(
 		std::atoi(m_playerNumberEntry->getText().toAnsiString().c_str()), 
 		m_ipAddressEntry->getText().toAnsiString()));
-	dtn::SceneManager::getInstance()->runScene(gc);
+	dtn::SceneManager::getInstance()->runScene(match);
+}
+
+void dtn::HUDMainMenu::onPlayLocallyButtonClicked()
+{
+	std::cout << "Play locally clicked!\n";
+	auto match = std::make_shared<SceneSingleplayerMatch>();
+	dtn::SceneManager::getInstance()->runScene(match);
 }
 
 void dtn::HUDMainMenu::onQuitButtonClicked()

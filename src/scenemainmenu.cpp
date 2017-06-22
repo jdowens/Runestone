@@ -4,6 +4,7 @@ dtn::SceneMainMenu::SceneMainMenu()
 {
 	m_inputhandler = NULL;
 	m_screen = NULL;
+	m_eventManager = NULL;
 }
 
 void dtn::SceneMainMenu::onAttach(sf::RenderWindow& dest)

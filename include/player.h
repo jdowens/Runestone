@@ -49,6 +49,7 @@ namespace dtn
 		bool attackRunestone(sf::Vector2i source, sf::Vector2i dest, dtn::Battlefield& battlefield);
 		
 		// mana controls
+		int getCurrentMana();
 		void increaseMana(int n = 1);
 		void resetCurrentMana();
 

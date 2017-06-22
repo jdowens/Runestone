@@ -62,7 +62,23 @@ namespace dtn
 
 		// debug rendering function (NOT USED)
 		void render(sf::RenderWindow& window, int playerID);
-		
+
+		// AI helper functions
+		std::shared_ptr<EntityBattlefield> getFirstMoveableEntity(int playerID);
+		std::shared_ptr<EntityBattlefield> getFirstAttackReadyEntity(int playerID);
+		std::vector<std::shared_ptr<EntityBattlefield>> getAllMovableEntities(int playerID);
+		std::vector<std::shared_ptr<dtn::EntityBattlefield>> getAllOwnedRunes(int playerID);
+		sf::Vector2i pathToEnemyBase(std::shared_ptr<EntityBattlefield> ent);
+		sf::Vector2i pathToSpace(std::shared_ptr<EntityBattlefield> ent, sf::Vector2i dest);
+		std::vector<sf::Vector2i> getBorderingSpaces(sf::IntRect bounds);
+		std::shared_ptr<dtn::EntityBattlefield> findPlayerBase(int playerID);
+		sf::Vector2i closestSpace(std::vector<sf::Vector2i> list, sf::Vector2i dest);
+		sf::Vector2i closestUnoccupiedSpace(std::vector<sf::Vector2i> list, sf::Vector2i dest);
+		std::shared_ptr<dtn::EntityBattlefield> closestEnemy(std::vector<std::shared_ptr<dtn::EntityBattlefield>> list, 
+			std::shared_ptr<dtn::EntityBattlefield> ent);
+		std::shared_ptr<dtn::EntityBattlefield> closestEnemyInRange(std::shared_ptr<EntityBattlefield> ent);
+		sf::Vector2i randomAvailablePlayLocation(int playerID);
+
 	private :
 		// w,h dimensions of board
 		sf::Vector2i m_dimension;				

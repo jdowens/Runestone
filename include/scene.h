@@ -8,6 +8,7 @@ A base class for any runnable scene (includes graphics and input handling)
 
 #include "gamescreen.h"
 #include "inputhandler.h"
+#include "eventmanager.h"
 
 namespace dtn
 {
@@ -23,6 +24,12 @@ namespace dtn
 		// update (one loop iteration)
 		virtual void update(float dt, sf::RenderWindow& window) = 0;
 
+		// get reference to event manager
+		std::shared_ptr<EventManager> getEventManager();
+
+		// update event manager
+		void updateEventManager();
+
 		// draw the scene to the screen
 		virtual void render(sf::RenderWindow& target) = 0;		
 	protected:
@@ -30,6 +37,7 @@ namespace dtn
 		std::shared_ptr<Screen> m_screen;						// graphics portion
 		std::shared_ptr<InputHandler> m_inputhandler;			// all input handled here
 		std::shared_ptr<HUD> m_hud;
+		std::shared_ptr<EventManager> m_eventManager;			// the scene's event manager
 	};
 }
 

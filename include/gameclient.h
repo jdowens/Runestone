@@ -25,21 +25,18 @@
 
 namespace dtn
 {
-	class GameClient : public Scene
+	class GameClient
 	{
 	public :
 		// constructor
-		GameClient(int playerID, std::string ip);
+		GameClient(int playerID, std::string ip, std::shared_ptr<EventManager> eventManager);
 		
 		// on attach
-		virtual void onAttach(sf::RenderWindow& dest);
+		void connectToServer();
 
 		// update (one loop iteration)
-		virtual void update(float dt, sf::RenderWindow& window);
-
-		// render function
-		virtual void render(sf::RenderWindow& target);
-	private :
+		virtual void update(float dt);
+	protected :
 
 		// TCP communication function (receive)
 		void receiveStrings();
@@ -53,13 +50,9 @@ namespace dtn
 		sf::Mutex m_mutex;										// global mutex (for dual thread communication)
 		sf::Thread m_thread;									// one thread used to receive data asynchronously
 		std::string m_ip;										// the ip address of the server
-		bool m_running;											// flag for whether or not a player has quit the game
-																
+		std::shared_ptr<EventManager> m_eventManager;			// event manager for communication
+
 		// listeners
-		void onEntityDrawn(std::shared_ptr<dtn::Event> e);
-		void onEntityMoved(std::shared_ptr<dtn::Event> e);
-		void onEntityBattle(std::shared_ptr<dtn::Event> e);
-		void onEntityAdded(std::shared_ptr<dtn::Event> e);
 		void onGameQuit(std::shared_ptr<dtn::Event> e);
 	};
 }

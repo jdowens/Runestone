@@ -15,13 +15,14 @@ namespace dtn
 	class InputHandlerGame : public InputHandler
 	{
 	public:
-		InputHandlerGame(int playerID);
+		InputHandlerGame(int playerID, std::shared_ptr<EventManager> eventManager);
 		virtual void update(sf::RenderWindow& window, std::shared_ptr<Screen> screen,
 			std::shared_ptr<HUD> HUD);
 	private:
 		void updateHovered(GameScreen* screen);
 		void handleEvents(sf::RenderWindow& window, GameScreen* screen,
 			std::shared_ptr<HUD> hud);
+		std::shared_ptr<EventManager> m_eventManager;
 		sf::Vector2i m_mousePos;
 		std::shared_ptr<dtn::Renderable> m_hovered;
 		std::shared_ptr<dtn::Renderable> m_selected;
