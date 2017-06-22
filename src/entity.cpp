@@ -14,7 +14,7 @@ dtn::Entity::Entity(int count, dtn::Entity::EntityType type)
 	// increase entity count
 	entityCount++;
 	// create entity id
-	_Uint32t baseID = static_cast<_Uint32t>(type) << 24;
+	uint32_t baseID = static_cast<uint32_t>(type) << 24;
 	m_entityID = count | baseID;
 	m_type = type;
 }

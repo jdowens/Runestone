@@ -100,7 +100,7 @@ void dtn::EventManager::removeListener(int id)
 // calculateID
 int dtn::EventManager::calculateID(dtn::Event::EventType t)
 {
-	_Uint32t id = (_Uint32t)t << 24;
+	uint32_t id = (uint32_t)t << 24;
 	m_idCounts[t]++;
 	id = id | m_idCounts[t];
 	return id;

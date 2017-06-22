@@ -729,7 +729,7 @@ std::string dtn::EventRequestEntityMoveDecal::toString()
 	return ss.str();
 }
 
-dtn::EventReceivedEntityMoveDecal::EventReceivedEntityMoveDecal(std::vector<sf::Vector2i>& locs)
+dtn::EventReceivedEntityMoveDecal::EventReceivedEntityMoveDecal(const std::vector<sf::Vector2i>& locs)
 	: dtn::Event(dtn::Event::EventType::RECEIVED_ENTITY_MOVE_DECAL)
 {
 	for (auto it = locs.begin(); it != locs.end(); ++it)
@@ -751,7 +751,7 @@ std::string dtn::EventReceivedEntityMoveDecal::toString()
 	return ss.str();
 }
 
-dtn::EventReceivedBoardLOSDecal::EventReceivedBoardLOSDecal(std::vector<sf::Vector2i>& locs)
+dtn::EventReceivedBoardLOSDecal::EventReceivedBoardLOSDecal(const std::vector<sf::Vector2i>& locs)
 	: Event(dtn::Event::EventType::RECEIVED_BOARD_LOS_DECAL)
 {
 	for (auto it = locs.begin(); it != locs.end(); ++it)

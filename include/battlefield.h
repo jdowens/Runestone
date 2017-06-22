@@ -50,7 +50,7 @@ namespace dtn
 
 		// entity polling and reset functions
 		std::shared_ptr<EntityBattlefield> getEntityBattlefieldAt(sf::Vector2i position);
-		void dtn::Battlefield::resetEntityBattlefieldFlags();
+		void resetEntityBattlefieldFlags();
 
 		// update function (called once per frame)
 		void update();

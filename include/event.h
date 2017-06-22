@@ -315,7 +315,7 @@ namespace dtn
 	*/
 	struct EventReceivedEntityMoveDecal : public Event
 	{
-		EventReceivedEntityMoveDecal(std::vector<sf::Vector2i>& locs);
+		EventReceivedEntityMoveDecal(const std::vector<sf::Vector2i>& locs);
 		virtual std::string toString();
 		std::vector<sf::Vector2i> movementLocations;
 	};
@@ -326,7 +326,7 @@ namespace dtn
 	*/
 	struct EventReceivedBoardLOSDecal : public Event
 	{
-		EventReceivedBoardLOSDecal(std::vector<sf::Vector2i>& locs);
+		EventReceivedBoardLOSDecal(const std::vector<sf::Vector2i>& locs);
 		virtual std::string toString();
 		std::vector<sf::Vector2i> locations;
 	};
